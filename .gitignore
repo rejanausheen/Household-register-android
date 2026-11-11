@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/outputs/
+.gradle/
+*.apk
+*.exe
+android/app/src/main/assets/
