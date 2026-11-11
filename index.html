@@ -1,0 +1,448 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Household Help Register</title>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0e7c66"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f3f6f4;--card:#fff;--ink:#16302b;--mut:#5d716c;--ln:#d5e0db;--pri:#0e7c66;--pri2:#0a5e4d;--p:#d7f0e4;--pt:#0b6b3f;--a:#fbe0d6;--at:#a8380f;--h:#fdeec4;--ht:#7a5400;--hol:#dce7fb;--holt:#2c4f9e}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a17;--card:#17261f;--ink:#e6f1ed;--mut:#9bb0a9;--ln:#2a3d36;--pri:#3cc4a3;--pri2:#2aa085;--p:#173d2c;--pt:#7be0aa;--a:#46241a;--at:#ff9b78;--h:#40340f;--ht:#f2cf6b;--hol:#1d2c4d;--holt:#9fbcf7}}
+:root[data-theme="dark"]{--bg:#0f1a17;--card:#17261f;--ink:#e6f1ed;--mut:#9bb0a9;--ln:#2a3d36;--pri:#3cc4a3;--pri2:#2aa085;--p:#173d2c;--pt:#7be0aa;--a:#46241a;--at:#ff9b78;--h:#40340f;--ht:#f2cf6b;--hol:#1d2c4d;--holt:#9fbcf7}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:15px/1.5 "Trebuchet MS",Verdana,system-ui,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--pri);color:var(--on,#fff)}
+header img{height:44px;width:44px;object-fit:contain;background:#fff;border-radius:10px;padding:3px}
+header h1{font:700 20px/1.2 Georgia,serif;margin:0}
+nav{display:flex;gap:4px;overflow-x:auto;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--ln);position:sticky;top:env(safe-area-inset-top,0px);z-index:3}
+nav button{flex:0 0 auto;border:0;background:none;color:var(--mut);font:600 14px "Trebuchet MS",Verdana,system-ui,sans-serif;padding:8px 13px;border-radius:999px;cursor:pointer}
+nav button.on{background:var(--pri);color:var(--on,#fff)}
+main{max-width:980px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:14px}
+h2{font:700 18px Georgia,serif;margin:0 0 10px}h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+label{display:block;font-size:13px;color:var(--mut);flex:1 1 150px}
+input,select,textarea{width:100%;margin-top:3px;padding:9px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=checkbox]{width:auto;margin:0 6px 0 0}
+button.b{border:0;background:var(--pri);color:var(--on,#fff);border-radius:9px;padding:9px 15px;font:600 14px "Trebuchet MS",Verdana,system-ui,sans-serif;cursor:pointer}
+button.b:hover{background:var(--pri2)}button.g{background:none;color:var(--pg,var(--pri));border:1px solid var(--pg,var(--pri))}button.d{background:none;color:var(--at);border:1px solid var(--at)}
+button.s{padding:5px 10px;font-size:13px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f2a900;outline-offset:1px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:480px}th{background:var(--pri);color:var(--on,#fff);text-align:left;padding:8px;font-size:13px;white-space:nowrap}td{padding:8px;border-top:1px solid var(--ln);white-space:nowrap}td.n,th.n{text-align:right}tr.t td{font-weight:700;background:var(--bg)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.cal .wd{text-align:center;font-size:12px;color:var(--mut)}
+.day{border:1px solid var(--ln);border-radius:9px;min-height:58px;padding:4px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;text-align:left;display:flex;flex-direction:column;justify-content:space-between}
+.day b{font-size:13px}.day small{font-size:11px;font-weight:700;line-height:1.1;overflow:hidden}
+.day.P{background:var(--p);color:var(--pt)}.day.A{background:var(--a);color:var(--at)}.day.H{background:var(--h);color:var(--ht)}.day.hol{background:var(--hol);color:var(--holt)}.day.e{visibility:hidden}
+.sum{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sum span{background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:6px 10px;font-size:13px}.sum b{font-size:16px}
+.mut{color:var(--mut);font-size:13px}.bad{color:var(--at)}.ok{color:var(--pt)}
+.empty{text-align:center;padding:26px 10px;color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:14px;display:none;z-index:9}
+.logo-prev{height:64px;width:64px;object-fit:contain;border:1px solid var(--ln);border-radius:10px;background:#fff}
+.rh{display:none}
+.ex{margin-left:10px;background:none;border:1px solid var(--on,#fff);color:var(--on,#fff);border-radius:8px;padding:6px 12px;font:600 13px "Trebuchet MS",Verdana,system-ui,sans-serif;cursor:pointer}.ex.x{background:#d92d20;border-color:#d92d20;color:#fff}.ex.x:hover{background:#b42318;border-color:#b42318}
+.sw{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 12px}.swb{width:38px;height:38px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 1px var(--ln);cursor:pointer;padding:0}.swb.on{box-shadow:0 0 0 3px var(--ink)}.cp{flex:0 0 auto;display:flex;align-items:center;gap:8px}.cp input{width:44px;height:38px;padding:0;margin:0;border:0;background:none}
+.row>button{flex:0 0 auto}.card>.tw:not(:first-child){margin-top:16px;clear:both;position:relative}.ck{display:flex;align-items:center;gap:8px;flex:none;font-size:14px}.ck input{margin:0;flex:none}
+label{text-transform:capitalize}.ck{text-transform:none}th{text-transform:capitalize}
+details.card>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;font:700 18px Georgia,serif;user-select:none;-webkit-user-select:none;min-height:32px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:'Show ▾';font:600 12px "Trebuchet MS",Verdana,system-ui,sans-serif;color:var(--pg,var(--pri));border:1px solid var(--pg,var(--pri));border-radius:999px;padding:4px 11px;flex:none}
+details.card[open]>summary::after{content:'Hide ▴'}details.card[open]>summary{margin-bottom:10px}
+summary:focus-visible{outline:3px solid #f2a900;outline-offset:2px}
+.edb{background:var(--h);color:var(--ht);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;margin:10px 0}
+.cal.lk .day{cursor:not-allowed}
+.pr{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--ln)}.pr.dn .pt{text-decoration:line-through;opacity:.6}.pt small{color:var(--mut);font-weight:400}.pa{display:flex;gap:6px;flex:none}.gh{font-weight:700;margin:14px 0 2px;font-size:14px;color:var(--pg,var(--pri))}.pc{flex:1;min-width:0;align-items:flex-start;font-size:15px;color:var(--ink)}.pc input{margin-top:4px;width:20px;height:20px}.bd{background:#d92d20;color:#fff;border-radius:999px;padding:0 6px;font-size:11px;margin-left:2px}
+.chip{display:inline-block;border:1px solid;border-radius:999px;padding:0 9px;font-size:12px;font-weight:700}.pa{flex-wrap:wrap;justify-content:flex-end}
+#dash{max-width:980px;margin:0 auto;padding:12px 14px 0}
+.dtop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.clk{display:flex;align-items:center;gap:10px;color:var(--ink)}.dg{display:flex;flex-direction:column;line-height:1.15}.dg b{font:700 22px Georgia,serif}.dg small{color:var(--mut);font-size:12px}
+#flag{display:block}
+.wx{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.wx .wi{font-size:38px;line-height:1}.wt b{display:block;font-size:30px;line-height:1.05}.wt small{font-size:13px}
+.wm{flex:1 1 220px;min-width:0}.wd1{font-weight:700;font-size:14px}.wd2{font-size:12.5px;margin-top:2px}
+.w-sun{background:linear-gradient(120deg,#c2570c,#9a3412)}.w-cloud{background:linear-gradient(120deg,#5b6b7e,#334155)}.w-rain{background:linear-gradient(120deg,#2563eb,#1e3a8a)}.w-storm{background:linear-gradient(120deg,#5b21b6,#1e1b4b)}.w-snow{background:linear-gradient(120deg,#0e7490,#475569)}.w-night{background:linear-gradient(120deg,#1e3a8a,#312e81)}
+.spb{margin-top:10px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,#be185d,#c2410c,#15803d,#1d4ed8);color:#fff;font-weight:700;text-align:center}
+#lk{position:fixed;inset:0;z-index:100;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}
+.lkb{width:100%;max-width:320px;text-align:center}.lkl{font-size:40px}.lkb h2{margin:6px 0}
+.dots{display:flex;justify-content:center;gap:14px;margin:16px 0}.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--pri)}.dots i.f{background:var(--pri)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pad button{height:64px;border-radius:50%;border:1px solid var(--ln);background:var(--card);color:var(--ink);font:600 24px "Trebuchet MS",Verdana,system-ui,sans-serif;cursor:pointer}.pad button:active{background:var(--pri);color:var(--on,#fff)}
+.lkf{margin-top:18px;background:none;border:0;color:var(--mut);text-decoration:underline;cursor:pointer;font-size:13px}
+@media print{#dash,#lk{display:none!important}}
+.ex:disabled{opacity:.6;cursor:wait}.ex:hover{background:rgba(128,128,128,.25)}
+.sy{margin-left:auto;font-size:12px;opacity:.9;text-align:right}
+html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+@media(max-width:700px){
+header{padding:10px 14px;flex-wrap:wrap;row-gap:6px}header img{height:38px;width:38px}header h1{font-size:17px}
+nav{position:fixed;top:auto;bottom:0;left:0;right:0;border-bottom:0;border-top:1px solid var(--ln);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));gap:2px;z-index:5}
+nav button{flex:1 0 auto;padding:10px 8px;font-size:12px;border-radius:10px;text-align:center}
+main{padding:12px 10px calc(84px + env(safe-area-inset-bottom,0px))}
+.card{padding:12px}
+input,select,textarea{font-size:16px;padding:11px}
+label{flex:1 1 44%}
+button.b{min-height:44px;padding:10px 14px}button.s{min-height:38px;padding:8px 12px}
+.cal{gap:3px}.day{min-height:54px;padding:3px}.day b{font-size:14px}.day small{font-size:10px}
+#toast{bottom:calc(76px + env(safe-area-inset-bottom,0px));max-width:90vw;text-align:center;border-radius:14px}
+table{min-width:420px}
+}
+@media print{header,nav,.noprint,#toast{display:none!important}.rh{display:flex;align-items:center;gap:10px;margin-bottom:10px}.rh img{height:40px}body{background:#fff;color:#000}.card{border:0;padding:0}th{background:#ddd!important;color:#000!important}}
+</style></head><body>
+<header><img id="hl" alt="" style="display:none"><h1 id="hn"></h1><span class="sy" id="sy">Connecting…</span><button class="ex" id="sb" onclick="syncNow()" title="Sync now">Sync</button><button class="ex" id="lkb" onclick="showLock()" title="Lock the app" hidden>🔒 Lock</button><button class="ex" id="ib" onclick="installApp()" hidden>Install app</button><button class="ex x" onclick="exitApp()" title="Save and exit">Exit</button></header>
+<section id="dash" class="noprint"></section>
+<nav id="nav"></nav><main id="m"></main><div id="toast"></div>
+<script>
+const K='helpbook-v1',$=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),
+esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
+MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+money=n=>'₹'+Math.round(n).toLocaleString('en-IN'),dim=(y,m)=>new Date(y,m,0).getDate(),
+key=(y,m,d)=>y+'-'+pad(m)+'-'+pad(d),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+fd=s=>s?s.slice(8,10)+'-'+s.slice(5,7)+'-'+s.slice(0,4):'';
+const DEF=()=>({label:'Household Help Register',logo:'',people:[],att:{},pay:[],hol:[],extra:[],pl:[],jr:[],cj:[],cp:[],at:{},nt:{},nat:{},del:{},lbt:0});
+let S;try{S=Object.assign(DEF(),JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){S=DEF()}
+const now=new Date(),ui={tab:'att',pid:'',mon:now.getFullYear()+'-'+pad(now.getMonth()+1),ry:now.getFullYear(),rt:'month',rp:'all',edit:null};
+const LK=K+'-look',PRE=['#0e7c66','#1d4ed8','#6d28d9','#be185d','#c2410c','#0f766e','#334155','#b91c1c','#a16207'];
+let LOOK={th:'auto',acc:'',fs:15};try{Object.assign(LOOK,JSON.parse(localStorage.getItem(LK)||'{}'))}catch(e){}
+const lum=h=>{const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(n>>16)+.7152*f(n>>8&255)+.0722*f(n&255)},
+mix=(h,t,a)=>{const n=parseInt(h.slice(1),16);return'#'+[n>>16,n>>8&255,n&255].map(v=>Math.round(v+(t-v)*a).toString(16).padStart(2,'0')).join('')};
+function look(){const r=document.documentElement,L=LOOK,st=r.style;if(L.th=='auto')r.removeAttribute('data-theme');else r.dataset.theme=L.th;
+ const dark=L.th=='dark'||(L.th=='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+ if(L.acc){let a=L.acc;if(dark&&lum(a)<.12)a=mix(a,255,.35);st.setProperty('--pri',a);st.setProperty('--pri2',mix(a,0,.22));st.setProperty('--pg',dark?mix(L.acc,255,.45):a);st.setProperty('--on',lum(a)>.45?'#111':'#fff')}
+ else['--pri','--pri2','--pg','--on'].forEach(v=>st.removeProperty(v));
+ document.body.style.fontSize=(L.fs||15)+'px'}
+function savLook(){try{localStorage.setItem(LK,JSON.stringify(LOOK))}catch(e){}look()}
+function setTheme(v){LOOK.th=v;savLook()}
+function setFs(v){LOOK.fs=+v;savLook()}
+function setAcc(c){LOOK.acc=c;savLook();draw()}
+function resetLook(){LOOK={th:'auto',acc:'',fs:15};savLook();draw();toast('Appearance reset')}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',look)}catch(e){}
+const FZ=(()=>{try{return JSON.parse(localStorage.getItem(K+'-fold')||'{}')}catch(e){return{}}})();
+const fo=(id,d)=>((FZ[id]===undefined?d:FZ[id])?'open ':'')+`ontoggle="fz('${id}',this.open)"`;
+function fz(id,v){if(FZ[id]===v)return;FZ[id]=v;try{localStorage.setItem(K+'-fold',JSON.stringify(FZ))}catch(e){}}
+let CFG={};try{CFG=JSON.parse(localStorage.getItem(K+'-cfg')||'{}')}catch(e){}
+let RTS=0,pushT,busy=false,dirty=false;
+const on=()=>CFG.url&&CFG.key,setSt=t=>{const e=$('#sy');if(e)e.textContent=t};
+async function api(action,x){const r=await fetch(CFG.url,{method:'POST',body:JSON.stringify(Object.assign({key:CFG.key,action},x))}),j=await r.json();if(!j.ok)throw new Error(j.error||'Request failed');return j}
+function keep(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('Could not save: browser storage is full or blocked.')}}
+function save(){S.ts=Date.now();keep();if(on()){setSt('Saving…');clearTimeout(pushT);pushT=setTimeout(push,900)}}
+const canon=x=>JSON.stringify(x,(k,v)=>k==='ts'?undefined:(v&&typeof v=='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(z=>[z,v[z]])):v));
+const rd=()=>{const a=document.activeElement;if(!(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName))&&$('#m'))draw()};
+async function push(){if(busy){dirty=true;return}busy=true;let ok=0;
+ try{for(let i=0;i<4&&!ok;i++){const j=await api('set',{data:S,expect:RTS});if(!j.conflict){RTS=S.ts;ok=1;break}S=merge(S,j.result);S.ts=Date.now();keep();RTS=j.result.ts||0;rd()}
+  setSt(ok?'Synced ✓':'Not synced – busy, will retry')}
+ catch(e){setSt('Not synced – '+e.message)}busy=false;if(dirty){dirty=false;push()}}
+async function pull(){if(!on()||busy)return;
+ try{const r=(await api('get')).result||{};
+  if(!r.ts){RTS=0;if(!S.ts)S.ts=Date.now();await push();return}
+  if(r.ts===RTS){setSt(S.ts===RTS?'Synced ✓':'Saving…');return}
+  const m=merge(S,r),ch=canon(m)!==canon(S),up=canon(m)!==canon(r);RTS=r.ts;S=m;
+  if(ch){keep();rd()}
+  if(up){S.ts=Date.now();keep();await push()}else setSt('Synced ✓')}
+ catch(e){setSt('Not synced – '+e.message)}}
+async function syncNow(){if(!on()){toast('Sync is not set up yet. Enter your address and key here.');go('set');return}
+ const b=$('#sb');b.disabled=true;b.textContent='Syncing…';setSt('Syncing…');clearTimeout(pushT);
+ try{for(let i=0;i<50&&busy;i++)await new Promise(r=>setTimeout(r,100));if(S.ts!==RTS)await push();await pull()}catch(e){setSt('Not synced – '+e.message)}
+ for(let i=0;i<50&&busy;i++)await new Promise(r=>setTimeout(r,100));
+ b.disabled=false;b.textContent='Sync';toast($('#sy').textContent.indexOf('Synced')==0?'Synced with your other devices':$('#sy').textContent)}
+async function exitApp(){if(ui.cal&&calDirty()&&!confirm('You have unsaved attendance changes. Exit without saving them?'))return;clearTimeout(pushT);keep();if(on()){for(let i=0;i<50&&busy;i++)await new Promise(r=>setTimeout(r,100));await push();for(let i=0;i<50&&busy;i++)await new Promise(r=>setTimeout(r,100))}
+ const ok=!on()||$('#sy').textContent.indexOf('Synced')==0;CFG={};
+ document.body.innerHTML=`<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;background:#f3f6f4;color:#16302b;font:16px 'Trebuchet MS',Verdana,sans-serif"><h2 style="font-family:Georgia,serif;margin:0">${ok?'Saved. You can close this window.':'Saved on this device.'}</h2><p style="margin:0;max-width:340px">${ok?'Your register is up to date on all devices.':'Syncing did not finish. It will sync the next time you open the app online.'}</p><button onclick="location.reload()" style="padding:12px 20px;border:0;border-radius:10px;background:#0e7c66;color:#fff;font:600 15px Verdana,sans-serif">Open again</button></div>`;
+ try{window.close()}catch(e){}}
+function saveSync(){const u=$('#su').value.trim(),k=$('#sk').value.trim();if(!/^https:\/\/script\.google\.com\//.test(u)||!k)return toast('Paste the Web app address (it starts with https://script.google.com) and your secret key.');CFG={url:u,key:k};try{localStorage.setItem(K+'-cfg',JSON.stringify(CFG))}catch(e){}setSt('Connecting…');pull();toast('Sync settings saved')}
+function stopSync(){CFG={};try{localStorage.removeItem(K+'-cfg')}catch(e){}setSt('This device only');draw()}
+function merge(a,b){const D=Object.assign({},b.del,a.del),o=Object.assign(DEF(),b);o.del=D;
+ const pick=(x,y,k,pre)=>{const m=new Map();(y||[]).forEach(i=>m.set(i[k],i));(x||[]).forEach(i=>{const j=m.get(i[k]);if(!j||(i.t||0)>=(j.t||0))m.set(i[k],i)});return[...m.values()].filter(i=>!D[pre+i[k]]&&!(i.pid&&D['p:'+i.pid])).sort((p,q)=>String(p[k]).localeCompare(String(q[k])))};
+ o.people=pick(a.people,b.people,'id','p:');o.pay=pick(a.pay,b.pay,'id','y:');o.extra=pick(a.extra,b.extra,'id','x:');o.hol=pick(a.hol,b.hol,'date','h:');o.pl=pick(a.pl,b.pl,'id','l:');o.jr=pick(a.jr,b.jr,'id','j:');o.cj=pick(a.cj,b.cj,'id','c:');o.cp=pick(a.cp,b.cp,'id','q:');
+ const live=new Set(o.people.map(p=>p.id)),u=(...z)=>[...new Set(z.flatMap(q=>Object.keys(q||{})))];
+ const cm=(ma,ta,mb,tb)=>{const m={},t={};u(ma,ta,mb,tb).forEach(pid=>{if(!live.has(pid))return;m[pid]={};t[pid]={};const A=(ma||{})[pid]||{},B=(mb||{})[pid]||{},TA=(ta||{})[pid]||{},TB=(tb||{})[pid]||{};u(A,B,TA,TB).forEach(d=>{const x=TA[d]||0,y=TB[d]||0,v=x>y?A[d]:y>x?B[d]:(A[d]!==undefined?A[d]:B[d]);if(v!==undefined)m[pid][d]=v;if(x||y)t[pid][d]=Math.max(x,y)})});return[m,t]};
+ [o.att,o.at]=cm(a.att,a.at,b.att,b.at);[o.nt,o.nat]=cm(a.nt,a.nat,b.nt,b.nat);
+ if((a.lbt||0)>(b.lbt||0)){o.label=a.label;o.logo=a.logo;o.lbt=a.lbt}else if(!b.logo&&a.logo&&!b.lbt)o.logo=a.logo;
+ return o}
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2600)}
+const hm=()=>Object.fromEntries(S.hol.map(h=>[h.date,h.name])),P=id=>S.people.find(p=>p.id==id),
+ym=s=>[+s.slice(0,4),+s.slice(5,7)];
+function stats(p,y,m,at0){const H=hm(),a=at0||S.att[p.id]||{};let pr=0,ab=0,hf=0,hl=0;
+ for(let d=1;d<=dim(y,m);d++){const k=key(y,m,d),v=a[k];if(v=='P')pr++;else if(v=='A')ab++;else if(v=='H')hf++;else if(H[k])hl++}
+ const r=+p.rate||0;let earned;
+ if(p.basis=='day')earned=r*(pr+hf/2+(p.payHol?hl:0));else earned=r-r/dim(y,m)*(ab+hf/2);
+ const paid=S.pay.filter(x=>x.pid==p.id&&x.mon==y+'-'+pad(m)).reduce((s,x)=>s+ +x.amt,0);
+ const ex=(S.extra||[]).filter(x=>x.pid==p.id&&x.date.slice(0,7)==y+'-'+pad(m)).reduce((s,x)=>s+ +x.amt,0);
+ return{pr,ab,hf,hl,ex,earned:Math.max(0,earned)+ex,paid}}
+const exd=(id,k)=>(S.extra||[]).filter(x=>x.pid==id&&x.date==k).reduce((s,x)=>s+ +x.amt,0);
+const TABS=[['att','Attendance'],['pay','Payments'],['ppl','People'],['hol','Holidays'],['pl','Planner'],['jr','Journal'],['rep','Reports'],['set','Settings']];
+function go(t){if(t!=ui.tab&&!lose())return;ui.tab=t;ui.edit=null;draw()}
+function brand(){$('#hn').textContent=S.label;document.title=S.label;const l=$('#hl');l.style.display=S.logo?'block':'none';if(S.logo)l.src=S.logo}
+function draw(){brand();$('#nav').innerHTML=TABS.map(([k,n])=>`<button class="${k==ui.tab?'on':''}" onclick="go('${k}')">${n}${k=='pl'&&plN()?` <span class="bd">${plN()}</span>`:''}</button>`).join('');
+ if(!ui.pid||!P(ui.pid))ui.pid=S.people[0]?.id||'';
+ const y0=window.scrollY,same=ui._t==ui.tab;ui._t=ui.tab;$('#m').innerHTML=V[ui.tab]();window.scrollTo(0,same?y0:0);if(window.spDraw)spDraw()}
+const psel=(id,val,all)=>`<label>Person<select id="${id}" onchange="${id=='ap'?'chgP(this)':'ui.'+(id=='rp'?'rp':'pp')+'=this.value;'+(id=='rp'?'rep()':'')}">${all?`<option value="all" ${val=='all'?'selected':''}>All people</option>`:''}${S.people.map(p=>`<option value="${p.id}" ${p.id==val?'selected':''}>${esc(p.name)} (${esc(p.role)})</option>`).join('')}</select></label>`;
+const none=()=>`<div class="card empty"><p>No one is on the register yet.</p><button class="b" onclick="go('ppl')">Add a house-maid, milkman or helper</button></div>`;
+const V={
+att(){if(!S.people.length)return none();const p=P(ui.pid),[y,m]=ui.mon.split('-').map(Number),H=hm(),a=ui.cal&&ui.draft&&ui.draft.pid==p.id?ui.draft.att:(S.att[p.id]||{}),first=new Date(y,m-1,1).getDay(),st=stats(p,y,m,a);
+ let c=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="wd">${d}</div>`).join('')+'<div class="day e"></div>'.repeat(first);
+ for(let d=1;d<=dim(y,m);d++){const k=key(y,m,d),v=a[k],cl=v||(H[k]?'hol':''),lb=v=='P'?'Present':v=='A'?'Absent':v=='H'?'Half day':H[k]?esc(H[k]).slice(0,14):'';
+  c+=`<button class="day ${cl}" onclick="tog('${k}')" aria-label="${k} ${lb}"><b>${d}</b><small>${lb}${exd(p.id,k)?' +'+money(exd(p.id,k)):''}${(S.nt[p.id]||{})[k]?' 📝':''}</small></button>`}
+ return `<div class="card"><div class="row">${psel('ap',ui.pid)}<label>Month<input type="month" value="${ui.mon}" onchange="chgMon(this)"></label></div>
+ <div class="sum"><span>Present <b>${st.pr}</b></span><span>Half <b>${st.hf}</b></span><span>Absent <b>${st.ab}</b></span><span>Holidays <b>${st.hl}</b></span><span>Extra work <b>${money(st.ex)}</b></span><span>Earned <b>${money(st.earned)}</b></span><span>Paid <b>${money(st.paid)}</b></span><span>Balance <b class="${st.earned-st.paid>0?'bad':'ok'}">${money(st.earned-st.paid)}</b></span></div>
+ ${ui.cal?'<div class="edb">Editing mode: your marks are saved only when you press Save.</div>':''}
+ <div class="row noprint" style="margin:0 0 12px">${ui.cal?`<button class="b" onclick="saveCal()">Save</button><button class="b g" onclick="cancelCal()">Cancel</button><button class="b g s" onclick="allP()">Mark all working days present</button><button class="b d s" onclick="clr()">Clear this month</button>`:`<button class="b" onclick="editCal()">Edit attendance</button><span class="mut">The calendar is locked so a stray touch cannot change it.</span>`}</div>
+ <div class="cal ${ui.cal?'':'lk'}">${c}</div><p class="mut">${ui.cal?'Tap a day to cycle: Present, Absent, Half day, blank. Blue days are holidays.':'Blue days are holidays. 📝 marks a day that has a note.'}</p></div>
+ <details class="card" ${fo('notes',0)}><summary>Notes for a day</summary><div class="row"><label>Day<input id="nd" type="date" min="${ui.mon}-01" max="${key(y,m,dim(y,m))}" value="${ui.mon==tdy().slice(0,7)?tdy():ui.mon+'-01'}"></label><label style="flex:2 1 220px">Note<input id="nn" placeholder="Came late, left early, reason for leave…"></label><button class="b" onclick="saveNote()">Save note</button></div><p class="mut">Days with a note show 📝 on the calendar. Saving an empty note removes it.</p>
+ <div class="tw"><table><tr><th>Day</th><th>Note</th><th></th></tr>${Object.entries(S.nt[p.id]||{}).filter(([d,t])=>t&&d.slice(0,7)==ui.mon).sort().map(([d,t])=>`<tr><td>${fd(d)}</td><td style="white-space:normal">${esc(t)}</td><td><button class="b g s" onclick="editNote('${d}')">Edit</button> <button class="b d s" onclick="delNote('${d}')">Delete</button></td></tr>`).join('')||'<tr><td colspan=3 class="empty">No notes this month.</td></tr>'}</table></div></details>
+ <details class="card" ${fo('extra',0)}><summary>Extra work payment</summary><p class="mut">Pay ${esc(p.name)} extra for work done on a particular day. It is added to this month’s earnings.</p><div class="row"><label>Day<input id="xd" type="date" min="${ui.mon}-01" max="${key(y,m,dim(y,m))}" value="${ui.mon==tdy().slice(0,7)?tdy():ui.mon+'-01'}"></label><label>Amount (₹)<input id="xa" type="number" min="0"></label><label>Work done<input id="xn" placeholder="Guests, deep cleaning, festival…"></label></div><label class="ck" style="margin-top:14px"><input type="checkbox" id="xp" checked>Paid now (also adds it to Payments)</label><div class="row" style="margin:12px 0 18px"><button class="b" onclick="addExtra()">Add extra work</button></div>
+ <div class="tw"><table><tr><th>Day</th><th>Work done</th><th class="n">Amount</th><th></th></tr>${(S.extra||[]).filter(x=>x.pid==p.id&&x.date.slice(0,7)==ui.mon).sort((a,b)=>a.date.localeCompare(b.date)).map(x=>`<tr><td>${fd(x.date)}</td><td>${esc(x.note)}</td><td class="n">${money(x.amt)}</td><td><button class="b d s" onclick="delExtra('${x.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan=4 class="empty">No extra work recorded this month.</td></tr>'}</table></div></details>`},
+pay(){if(!S.people.length)return none();const f=ui.pf||'all',y=ui.ry,L=S.pay.filter(x=>(f=='all'||x.pid==f)&&x.date.slice(0,4)==y).sort((a,b)=>b.date.localeCompare(a.date));
+ return `<div class="card"><h2>Record a payment</h2><div class="row">${psel('pp',ui.pp||ui.pid)}<label>Date<input id="pd" type="date" value="${tdy()}"></label><label>For month<input id="pm" type="month" value="${ui.mon}"></label><label>Amount (₹)<input id="pa" type="number" min="0"></label><label>Note<input id="pn" placeholder="Cash, advance, bonus…"></label><button class="b" onclick="addPay()">Save payment</button></div></div>
+ <details class="card" ${fo('payh',1)}><summary>Payment history</summary><div class="row"><label>Show person<select onchange="ui.pf=this.value;draw()"><option value="all">All people</option>${S.people.map(p=>`<option value="${p.id}" ${p.id==f?'selected':''}>${esc(p.name)}</option>`).join('')}</select></label><label>Year<input type="number" value="${y}" onchange="ui.ry=+this.value;draw()"></label></div>
+ <div class="tw"><table><tr><th>Date</th><th>Person</th><th>For month</th><th>Note</th><th class="n">Amount</th><th></th></tr>${L.map(x=>`<tr><td>${fd(x.date)}</td><td>${esc(P(x.pid)?.name||'(removed)')}</td><td>${x.mon}</td><td>${esc(x.note)}</td><td class="n">${money(x.amt)}</td><td><button class="d s b" onclick="delPay('${x.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan=6 class="empty">No payments for this selection.</td></tr>'}${L.length?`<tr class="t"><td colspan=4>Total</td><td class="n">${money(L.reduce((s,x)=>s+ +x.amt,0))}</td><td></td></tr>`:''}</table></div></details>`},
+ppl(){const e=ui.edit?P(ui.edit):{basis:'month',role:'House-maid'},roles=[...new Set(['House-maid','Milkman','Cook','Driver','Newspaper vendor',...S.people.map(p=>p.role)])];
+ return `<div class="card"><h2>${ui.edit?'Edit person':'Add a person'}</h2><div class="row"><label>Name<input id="fn" value="${esc(e.name||'')}"></label><label>Role<input id="fr" list="rl" value="${esc(e.role||'')}"><datalist id="rl">${roles.map(r=>`<option>${esc(r)}</option>`).join('')}</datalist></label><label>Paid by<select id="fb"><option value="month" ${e.basis=='month'?'selected':''}>Fixed monthly salary</option><option value="day" ${e.basis=='day'?'selected':''}>Per day worked</option></select></label><label>Rate (₹)<input id="fa" type="number" min="0" value="${e.rate||''}"></label><label>Phone (optional)<input id="fp" value="${esc(e.phone||'')}"></label></div>
+ <label class="ck" style="margin-top:10px"><input type="checkbox" id="fh" ${e.payHol?'checked':''}>Pay for holidays (only matters for “per day” pay; monthly salary always covers holidays)</label>
+ <p class="mut">Monthly salary: absent days deduct 1⁄days-in-month of the salary each, half days deduct half. Unmarked days are not deducted.</p>
+ <div class="row"><button class="b" onclick="savePerson()">${ui.edit?'Update':'Add person'}</button>${ui.edit?'<button class="b g" onclick="go(\'ppl\')">Cancel</button>':''}</div></div>
+ <div class="card"><h2>People (${S.people.length})</h2><div class="tw"><table><tr><th>Name</th><th>Role</th><th>Paid by</th><th class="n">Rate</th><th>Phone</th><th></th></tr>${S.people.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.role)}</td><td>${p.basis=='day'?'Per day':'Monthly'}</td><td class="n">${money(p.rate)}</td><td>${esc(p.phone||'')}</td><td><button class="b g s" onclick="ui.edit='${p.id}';draw();scrollTo(0,0)">Edit</button> <button class="b d s" onclick="delPerson('${p.id}')">Remove</button></td></tr>`).join('')||'<tr><td colspan=6 class="empty">Nobody added yet.</td></tr>'}</table></div></div>`},
+hol(){const y=ui.ry,L=S.hol.filter(h=>h.date.slice(0,4)==y).sort((a,b)=>a.date.localeCompare(b.date));
+ return `<div class="card"><h2>Holidays</h2><p class="mut">On a holiday, helpers are not marked absent. Monthly salary is paid in full; per-day pay follows each person’s “pay for holidays” setting.</p><div class="row"><label>Date<input id="hd" type="date"></label><label>Name<input id="hn2" placeholder="Diwali, Eid, Christmas…"></label><button class="b" onclick="addHol()">Add holiday</button></div>
+ <div class="row" style="margin-top:12px"><label>Year<input type="number" value="${y}" onchange="ui.ry=+this.value;draw()"></label><button class="b g" onclick="sundays()">Add all Sundays of ${y}</button></div></div>
+ <div class="card"><div class="tw"><table><tr><th>Date</th><th>Day</th><th>Holiday</th><th></th></tr>${L.map(h=>`<tr><td>${fd(h.date)}</td><td>${new Date(h.date+'T00:00').toLocaleDateString('en-IN',{weekday:'long'})}</td><td>${esc(h.name)}</td><td><button class="b d s" onclick="delHol('${h.date}')">Delete</button></td></tr>`).join('')||`<tr><td colspan=4 class="empty">No holidays listed for ${y}.</td></tr>`}</table></div></div>`},
+rep(){setTimeout(rep,0);return `<div class="card noprint"><h2>Reports</h2><div class="row"><label>Report<select onchange="ui.rt=this.value;rep()" id="rt">${[['month','Monthly statement (everyone)'],['year','Yearly summary'],['ledger','Payment ledger'],['reg','Attendance register'],['notes','Attendance notes'],['pl','Chores and events'],['jr','Journal']].map(([k,n])=>`<option value="${k}" ${k==ui.rt?'selected':''}>${n}</option>`).join('')}</select></label>${psel('rp',ui.rp,1)}<label>Month<input type="month" value="${ui.mon}" onchange="ui.mon=this.value||ui.mon;ui.ry=+ui.mon.slice(0,4);rep()"></label><label>Year<input type="number" value="${ui.ry}" onchange="ui.ry=+this.value;rep()"></label></div></div><div class="card" id="rep"></div>`},
+set(){return `<details class="card" ${fo('s-logo',1)}><summary>App name and logo</summary><div class="row"><label>Label shown at the top<input id="sl" value="${esc(S.label)}"></label><button class="b" onclick="S.label=$('#sl').value.trim()||'Household Help Register';S.lbt=Date.now();save();brand();toast('Label saved')">Save label</button></div>
+ <div class="row" style="margin-top:14px">${S.logo?`<img class="logo-prev" src="${S.logo}" alt="Logo">`:'<span class="mut">No logo yet.</span>'}<label>Choose a logo image<input type="file" accept="image/*" onchange="logo(this)"></label>${S.logo?'<button class="b d" onclick="S.logo=\'\';S.lbt=Date.now();save();draw()">Remove logo</button>':''}</div></details>
+ <details class="card" ${fo('s-look',1)}><summary>Appearance</summary><div class="row"><label>Theme<select onchange="setTheme(this.value)"><option value="auto" ${LOOK.th=='auto'?'selected':''}>Automatic (follow my device)</option><option value="light" ${LOOK.th=='light'?'selected':''}>Light</option><option value="dark" ${LOOK.th=='dark'?'selected':''}>Dark</option></select></label><label>Text size<select onchange="setFs(this.value)">${[[14,'Small'],[15,'Normal'],[17,'Large'],[19,'Extra large']].map(([v,n])=>`<option value="${v}" ${(LOOK.fs||15)==v?'selected':''}>${n}</option>`).join('')}</select></label></div>
+ <h3 style="margin-top:14px">Colour</h3><div class="sw">${PRE.map(c=>`<button class="swb ${(LOOK.acc||PRE[0]).toLowerCase()==c?'on':''}" style="background:${c}" aria-label="Colour ${c}" onclick="setAcc('${c}')"></button>`).join('')}<label class="cp">Custom<input type="color" value="${LOOK.acc||PRE[0]}" onchange="setAcc(this.value)"></label></div>
+ <div class="row"><button class="b g s" onclick="resetLook()">Reset to default</button></div><p class="mut">Appearance is saved on this device only, so your phone and computer can look different.</p></details>
+ <details class="card" ${fo('s-dash',1)}><summary>Dashboard, clock and weather</summary>
+ <label class="ck"><input type="checkbox" ${PF.clock?'checked':''} onchange="setPF('clock',this.checked?1:0)">Show the clock</label>
+ <label class="ck" style="margin-top:8px"><input type="checkbox" ${PF.flag?'checked':''} onchange="setPF('flag',this.checked?1:0)">Show the waving National Flag</label>
+ <label class="ck" style="margin-top:8px"><input type="checkbox" ${PF.wx?'checked':''} onchange="setPF('wx',this.checked?1:0)">Show the date, temperature and weather banner</label>
+ <div class="row" style="margin-top:12px"><label>Temperature unit<select onchange="setPF('unit',this.value)"><option value="c" ${PF.unit!='f'?'selected':''}>Celsius (°C)</option><option value="f" ${PF.unit=='f'?'selected':''}>Fahrenheit (°F)</option></select></label></div>
+ <h3 style="margin-top:14px">Weather location: ${PF.loc?esc(PF.loc.name):'not set yet'}</h3>
+ <div class="row"><label style="flex:2 1 200px">Search your city or town<input id="wq" placeholder="Type a city name" onkeydown="if(event.key=='Enter')geoSearch()"></label><button class="b" onclick="geoSearch()">Search</button><button class="b g" onclick="myLoc()">Use my current location</button></div><div id="wr"></div>
+ <p class="mut">These choices are saved on this device only. Weather comes from the free Open-Meteo service and needs an internet connection.</p></details>
+ <details class="card" ${fo('s-cf',1)}><summary>Confetti on special days</summary>
+ <label class="ck"><input type="checkbox" ${PF.cf?'checked':''} onchange="setPF('cf',this.checked?1:0)">Shower confetti on special days</label>
+ <label class="ck" style="margin-top:8px"><input type="checkbox" ${PF.cfd?'checked':''} onchange="setPF('cfd',this.checked?1:0)">Important dates from the Planner (birthdays, anniversaries…)</label>
+ <label class="ck" style="margin-top:8px"><input type="checkbox" ${PF.cfh?'checked':''} onchange="setPF('cfh',this.checked?1:0)">Holidays from the Holidays list</label>
+ <div class="row" style="margin-top:12px"><button class="b g" onclick="confetti(1)">Test confetti</button></div>
+ <p class="mut">Confetti falls once a day, when you open the app on a special day. Today’s special days also show in a banner under the title. Saved on this device only.</p></details>
+ <details class="card" ${fo('s-lock',1)}><summary>App lock</summary>
+ <p class="mut">${lockOn()?'The app is protected. It asks for your PIN'+(LKS.bio?' or fingerprint':'')+' when you open it.':'Protect the app with a PIN. On a phone you can also unlock with your fingerprint or face.'}</p>
+ <div class="row">${lockOn()?'<label>Current PIN<input id="lp0" type="password" inputmode="numeric" maxlength="6" autocomplete="off"></label>':''}<label>${lockOn()?'New PIN':'Choose a PIN'} (4 to 6 digits)<input id="lp1" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password"></label><label>Repeat PIN<input id="lp2" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password"></label></div>
+ <div class="row" style="margin-top:10px"><button class="b" onclick="setPin()">${lockOn()?'Change PIN':'Turn on app lock'}</button>${lockOn()?'<button class="b d" onclick="removePin()">Turn off lock</button>':''}</div>
+ ${lockOn()?`<div class="row" style="margin-top:14px"><label>Lock again after<select onchange="setAfter(this.value)">${[[0,'Immediately when I leave the app'],[30,'30 seconds'],[60,'1 minute'],[300,'5 minutes'],[900,'15 minutes'],[-1,'Only when I open the app']].map(([v,n])=>`<option value="${v}" ${LKS.after==v?'selected':''}>${n}</option>`).join('')}</select></label></div>
+ <div class="row" style="margin-top:10px">${LKS.bio?'<button class="b g" onclick="bioOff()">Turn off fingerprint unlock</button>':'<button class="b g" onclick="bioReg()">Enable fingerprint or face unlock</button>'}<button class="b g" onclick="showLock()">Lock now</button></div>`:''}
+ <p class="mut">This is a privacy lock for this device. It stops other people from opening the app, but it is not encryption. Fingerprint unlock uses your phone’s own fingerprint, face or screen-lock security. If you forget the PIN, this device’s copy is erased, and your synced data comes back when you set up sync again.</p></details>
+ <details class="card" ${fo('s-jc',1)}><summary>Journal categories</summary>
+ <div class="row"><label style="flex:2 1 200px">New category<input id="jcn" placeholder="Gifts, Vehicle, School…" onkeydown="if(event.key=='Enter')addJc()"></label><button class="b" onclick="addJc()">Add category</button></div>
+ <p class="mut">Built in: ${JCATS.join(', ')}.</p>
+ <div class="sw">${(S.cj||[]).map(c=>`<span class="chip" style="background:hsla(${hue(c.name)},65%,50%,.22);border-color:hsla(${hue(c.name)},65%,45%,.55);display:inline-flex;align-items:center;gap:6px">${esc(c.name)}<button class="b d s" style="padding:0 8px;min-height:26px" onclick="delJc('${c.id}')" aria-label="Delete ${esc(c.name)}">✕</button></span>`).join('')||'<span class="mut">No custom categories yet.</span>'}</div>
+ <p class="mut">Deleting a category does not change journal entries that already use it.</p></details>
+ <details class="card" ${fo('s-pt',1)}><summary>Planner types</summary>
+ <div class="row"><label style="flex:2 1 200px">Type name<input id="ptn" placeholder="Bill, Doctor visit, Festival…"></label><label style="flex:0 1 120px">Icon (emoji)<input id="pti" maxlength="4" placeholder="📌"></label></div>
+ <label class="ck" style="margin-top:10px"><input type="checkbox" id="ptk" checked>Has a tick box to mark as done (untick for dates only, like birthdays)</label>
+ <div class="row" style="margin-top:10px"><button class="b" onclick="addPt()">Add type</button></div>
+ <p class="mut">Built in: Chore, Event, Important date.</p>
+ <div class="sw">${(S.cp||[]).map(c=>`<span class="chip" style="display:inline-flex;align-items:center;gap:6px;border-color:var(--ln);background:var(--bg)">${esc(c.icon||'📌')} ${esc(c.name)}${c.tick?'':' (date only)'}<button class="b d s" style="padding:0 8px;min-height:26px" onclick="delPt('${c.id}')" aria-label="Delete ${esc(c.name)}">✕</button></span>`).join('')||'<span class="mut">No custom types yet.</span>'}</div>
+ <p class="mut">Deleting a type does not change planner entries that already use it.</p></details>
+ <details class="card" ${fo('s-sync',1)}><summary>Sync across devices</summary><p class="mut">Uses your own free Google account. Do the one-time steps in SETUP.txt, then enter the same address and key on every phone and computer.</p><div class="row"><label>Web app address<input id="su" value="${esc(CFG.url||'')}" placeholder="https://script.google.com/macros/s/…/exec"></label><label>Secret key<input id="sk" type="password" value="${esc(CFG.key||'')}"></label></div><div class="row" style="margin-top:10px"><button class="b" onclick="saveSync()">Save and sync</button>${on()?'<button class="b g" onclick="pull()">Sync now</button><button class="b d" onclick="stopSync()">Turn off sync</button>':''}</div></details>
+ <details class="card" ${fo('s-backup',1)}><summary>Backup and restore</summary><p class="mut">Data is also kept on each device, so the app opens offline. Copy a backup now and then and keep it somewhere safe.</p><div class="row"><button class="b g" onclick="txt('Backup (copy and save this text)',JSON.stringify(S))">Show backup text</button><button class="b g" onclick="restore()">Restore from backup text</button></div><div id="tx"></div></details>`}};
+const tdy=()=>{const d=new Date();return key(d.getFullYear(),d.getMonth()+1,d.getDate())},
+pd=s=>new Date(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10)),fmtD=d=>key(d.getFullYear(),d.getMonth()+1,d.getDate()),
+addDays=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return fmtD(d)},
+TYP={chore:'🧹',event:'📅',date:'⭐'};
+function occ(it,from,to){const out=[],r=it.rep||'none';
+ if(r=='none'){if(it.date>=from&&it.date<=to)out.push(it.date);return out}
+ if(it.date>to)return out;const s0=pd(it.date),f=pd(from>it.date?from:it.date),t=pd(to);
+ for(const d=new Date(f);d<=t;d.setDate(d.getDate()+1)){let ok=false;
+  if(r=='daily')ok=true;
+  else if(r=='weekly')ok=d.getDay()==s0.getDay();
+  else if(r=='monthly')ok=d.getDate()==Math.min(s0.getDate(),dim(d.getFullYear(),d.getMonth()+1));
+  else if(r=='yearly'){const ly=new Date(d.getFullYear(),1,29).getMonth()==1;ok=(s0.getMonth()==1&&s0.getDate()==29&&!ly)?(d.getMonth()==1&&d.getDate()==28):(d.getMonth()==s0.getMonth()&&d.getDate()==s0.getDate())}
+  if(ok)out.push(fmtD(d))}
+ return out}
+const plN=()=>{const t=tdy();return(S.pl||[]).filter(it=>ptype(it).k).reduce((n,it)=>n+occ(it,t,t).filter(d=>!(it.dn||{})[d]).length,0)};
+function prow(it,d,x){const dn=!!(it.dn||{})[d],y=it.rep=='yearly'?(+d.slice(0,4))-(+it.date.slice(0,4)):0;
+ return `<div class="pr ${dn?'dn':''}"><label class="ck pc">${ptype(it).k?`<input type="checkbox" ${dn?'checked':''} onchange="plDone('${it.id}','${d}',this.checked)" aria-label="Done">`:''}<span class="pt"><b>${ptype(it).i} ${esc(it.title)}</b>${it.time?` <small>${esc(it.time)}</small>`:''}${y>0?` <small>(${y} year${y>1?'s':''})</small>`:''}${x?` <small>${x}</small>`:''}${it.rep&&it.rep!='none'?` <small>↻ ${it.rep}</small>`:''}${it.note?`<br><small>${esc(it.note)}</small>`:''}</span></label><span class="pa"><button class="b g s" title="Add to journal" aria-label="Add to journal" onclick="plToJr('${it.id}','${d}')">📓</button><button class="b g s" onclick="editPl('${it.id}')">Edit</button><button class="b d s" onclick="delPl('${it.id}')">Delete</button></span></div>`}
+V.pl=()=>{const t0=tdy(),v=ui.pv||'day',e=ui.pe?S.pl.find(z=>z.id==ui.pe):null,sel=(a,b)=>a==b?'selected':'';ui.pd=ui.pd||t0;
+ const gather=(f,to)=>{const r=[];S.pl.forEach(it=>occ(it,f,to).forEach(d=>r.push([d,it])));return r.sort((a,b)=>a[0].localeCompare(b[0])||(a[1].time||'').localeCompare(b[1].time||'')||a[1].title.localeCompare(b[1].title))},
+ grp=r=>{let last='',h='';r.forEach(([d,it])=>{if(d!=last){last=d;h+=`<div class="gh">${pd(d).toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short',year:'numeric'})}${d==t0?' (Today)':''}</div>`}h+=prow(it,d)});return h||'<p class="empty">Nothing planned for this period.</p>'};
+ let body,top='';
+ if(v=='day'){const r=gather(ui.pd,ui.pd),ch=r.filter(([d,i])=>ptype(i).k),dn=ch.filter(([d,i])=>(i.dn||{})[d]).length;
+  top=`<label>Day<input type="date" value="${ui.pd}" onchange="ui.pd=this.value||ui.pd;draw()"></label><button class="b g s" onclick="ui.pd='${t0}';draw()">Today</button>`;
+  body=`<div class="sum"><span>Done <b>${dn}/${ch.length}</b></span><span>Entries <b>${r.length}</b></span></div>`+(r.map(([d,i])=>prow(i,d)).join('')||'<p class="empty">Nothing planned for this day.</p>')}
+ else if(v=='n30')body=grp(gather(t0,addDays(t0,30)));
+ else if(v=='mon'){const[y,m]=ym(ui.mon);top=`<label>Month<input type="month" value="${ui.mon}" onchange="ui.mon=this.value||ui.mon;draw()"></label>`;body=grp(gather(key(y,m,1),key(y,m,dim(y,m))))}
+ else{const r=[];S.pl.filter(i=>!ptype(i).k).forEach(it=>{const d=occ(it,t0,addDays(t0,366))[0];if(d)r.push([d,it])});r.sort((a,b)=>a[0].localeCompare(b[0]));
+  body=r.map(([d,it])=>{const n=Math.round((pd(d)-pd(t0))/864e5);return prow(it,d,fd(d)+' · '+(n==0?'Today':n==1?'Tomorrow':'in '+n+' days'))}).join('')||'<p class="empty">No important dates yet. Add birthdays, anniversaries, bills and renewals as “Important date”.</p>'}
+ return `<details class="card" ${ui.pe?'open':fo('plf',1)}><summary>${e?'Edit entry':'Add a chore, event or date'}</summary><div class="row"><label>Type<select id="lt" onchange="typeCh()">${ptypes().map(([k,n])=>`<option value="${k}" ${sel(e?.type||'chore',k)}>${esc(n)}</option>`).join('')}</select></label><label style="flex:2 1 220px">Title<input id="ln" value="${esc(e?.title||'')}" placeholder="Clean water tank, Guests coming, Mom’s birthday…"></label></div>
+ <div class="row" style="margin-top:10px"><label>Date<input id="ld" type="date" value="${e?e.date:ui.pd}"></label><label>Time (optional)<input id="lh" type="time" value="${e?.time||''}"></label><label>Repeat<select id="lr">${[['none','Does not repeat'],['daily','Every day'],['weekly','Every week'],['monthly','Every month'],['yearly','Every year']].map(([k,n])=>`<option value="${k}" ${sel(e?.rep||'none',k)}>${n}</option>`).join('')}</select></label></div>
+ <div class="row" style="margin-top:10px"><label style="flex:1 1 100%">Note<input id="lo" value="${esc(e?.note||'')}" placeholder="Details, phone number, reminder…"></label></div>
+ <div class="row" style="margin-top:12px"><button class="b" onclick="savePl()">${e?'Update':'Save entry'}</button>${e?'<button class="b g" onclick="ui.pe=null;draw()">Cancel</button>':''}</div></details>
+ <div class="card"><div class="row"><label>Show<select onchange="ui.pv=this.value;draw()"><option value="day" ${sel(v,'day')}>A single day</option><option value="n30" ${sel(v,'n30')}>Next 30 days</option><option value="mon" ${sel(v,'mon')}>A whole month</option><option value="imp" ${sel(v,'imp')}>Important dates</option></select></label>${top}</div>${body}</div>`};
+function savePl(){const t=$('#ln').value.trim(),d=$('#ld').value;if(!t||!d)return toast('Enter a title and a date.');
+ const o={type:$('#lt').value,tn:$('#lt').selectedOptions[0].textContent.replace(/^\S+\s/,''),title:t,date:d,time:$('#lh').value,rep:$('#lr').value,note:$('#lo').value.trim(),t:Date.now()};
+ if(ui.pe){Object.assign(S.pl.find(z=>z.id==ui.pe),o)}else S.pl.push(Object.assign({id:uid(),dn:{}},o));
+ ui.pe=null;ui.pd=d;save();toast('Saved');draw()}
+function plDone(id,d,v){const it=S.pl.find(z=>z.id==id);if(!it)return;it.dn=it.dn||{};if(v)it.dn[d]=1;else delete it.dn[d];it.t=Date.now();save();draw()}
+function editPl(id){ui.pe=id;draw();scrollTo(0,0)}
+function delPl(id){const it=S.pl.find(z=>z.id==id);if(!it||!confirm('Delete “'+it.title+'”'+(it.rep&&it.rep!='none'?' and all its repeats':'')+'?'))return;S.del['l:'+id]=Date.now();S.pl=S.pl.filter(z=>z.id!=id);save();draw()}
+const JCATS=['Purchase','Family','Health','Milestone','Task done','Travel','Home','Celebration','Other'],
+jcats=()=>[...new Set([...JCATS,...(S.cj||[]).map(c=>c.name),...(S.jr||[]).map(x=>x.cat).filter(Boolean)])],
+hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return h};
+function jBody(){const q=(ui.jq||'').toLowerCase().trim(),c=ui.jc||'',y=ui.jy||'',
+ L=S.jr.filter(x=>(!c||x.cat==c)&&(!y||x.date.slice(0,4)==y)&&(!q||(x.title+' '+(x.note||'')+' '+(x.cat||'')).toLowerCase().includes(q))).sort((a,b)=>b.date.localeCompare(a.date)||(b.t||0)-(a.t||0)),
+ tot=L.reduce((s,x)=>s+(+x.amt||0),0);let last='',h='';
+ L.forEach(x=>{const mk=x.date.slice(0,7);if(mk!=last){last=mk;h+=`<div class="gh">${pd(x.date).toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</div>`}
+  const hu=hue(x.cat||'Other');
+  h+=`<div class="pr"><div class="pt" style="flex:1;min-width:0"><small>${pd(x.date).toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</small> <span class="chip" style="background:hsla(${hu},65%,50%,.22);border-color:hsla(${hu},65%,45%,.55)">${esc(x.cat||'Other')}</span>${+x.amt?` <b>${money(x.amt)}</b>`:''}<br><b>${esc(x.title)}</b>${x.note?`<br><span style="white-space:pre-wrap;font-weight:400">${esc(x.note)}</span>`:''}</div><span class="pa"><button class="b g s" onclick="editJr('${x.id}')">Edit</button><button class="b d s" onclick="delJr('${x.id}')">Delete</button></span></div>`});
+ return `<div class="sum"><span>Entries <b>${L.length}</b></span>${tot?`<span>Total amount <b>${money(tot)}</b></span>`:''}</div>`+(h||'<p class="empty">No entries found. Add your first one above.</p>')}
+V.jr=()=>{const e=ui.je?S.jr.find(z=>z.id==ui.je):null,pre=!e&&ui.jpre?ui.jpre:null;ui.jpre=null;const v=e||pre||{},ys=[...new Set(S.jr.map(x=>x.date.slice(0,4)))].sort().reverse();
+ return `<details class="card" ${ui.je||pre?'open':fo('jf',1)}><summary>${e?'Edit entry':'Add to journal'}</summary>
+ <div class="row"><label>Date<input id="jd" type="date" value="${v.date||tdy()}"></label><label>Category<input id="jc" list="jcl" value="${esc(v.cat||'')}" placeholder="Purchase, Family, Health…"><datalist id="jcl">${jcats().map(c=>`<option>${esc(c)}</option>`).join('')}</datalist></label><label>Amount (₹, optional)<input id="ja" type="number" min="0" value="${v.amt||''}"></label></div>
+ <div class="row" style="margin-top:10px"><label style="flex:1 1 100%">What happened<input id="jt" value="${esc(v.title||'')}" placeholder="Bought a new wrist watch"></label></div>
+ <div class="row" style="margin-top:10px"><label style="flex:1 1 100%">Details<textarea id="jn" rows="3" placeholder="Where, who, how it went, anything to remember…">${esc(v.note||'')}</textarea></label></div>
+ <div class="row" style="margin-top:12px"><button class="b" onclick="saveJr()">${e?'Update':'Save entry'}</button>${e?'<button class="b g" onclick="ui.je=null;draw()">Cancel</button>':''}</div></details>
+ <div class="card"><div class="row"><label style="flex:2 1 200px">Search<input type="search" value="${esc(ui.jq||'')}" oninput="ui.jq=this.value;jList()" placeholder="Search your journal…"></label><label>Category<select onchange="ui.jc=this.value;jList()"><option value="">All</option>${jcats().map(c=>`<option ${c==ui.jc?'selected':''}>${esc(c)}</option>`).join('')}</select></label><label>Year<select onchange="ui.jy=this.value;jList()"><option value="">All</option>${ys.map(y=>`<option ${y==ui.jy?'selected':''}>${y}</option>`).join('')}</select></label></div><div id="jl">${jBody()}</div></div>`};
+function saveJr(){const t=$('#jt').value.trim(),d=$('#jd').value;if(!t||!d)return toast('Enter what happened and the date.');
+ const o={date:d,title:t,cat:$('#jc').value.trim()||'Other',amt:+$('#ja').value||0,note:$('#jn').value.trim(),t:Date.now()};
+ if(ui.je)Object.assign(S.jr.find(z=>z.id==ui.je),o);else S.jr.push(Object.assign({id:uid()},o));
+ ui.je=null;ui.jq=ui.jc=ui.jy='';save();toast('Saved to journal');draw()}
+function jList(){const e=$('#jl');if(e)e.innerHTML=jBody()}
+function editJr(id){ui.je=id;draw();scrollTo(0,0)}
+function delJr(id){const x=S.jr.find(z=>z.id==id);if(!x||!confirm('Delete “'+x.title+'”?'))return;S.del['j:'+id]=Date.now();S.jr=S.jr.filter(z=>z.id!=id);save();jList()}
+function plToJr(id,d){const it=S.pl.find(z=>z.id==id);if(!it)return;ui.jpre={title:it.title,date:d,note:it.note||'',cat:it.type=='chore'?'Task done':it.type=='event'?'Milestone':it.type=='date'?'Family':ptype(it).n};ui.tab='jr';draw()}
+// ===== planner types (built-in + custom from Settings) =====
+const BT={chore:{n:'Chore',i:'🧹',k:1},event:{n:'Event',i:'📅',k:1},date:{n:'Important date',i:'⭐',k:0}};
+const ptype=it=>{if(BT[it.type])return BT[it.type];const c=(S.cp||[]).find(x=>'x:'+x.id==it.type);return c?{n:c.name,i:c.icon||'📌',k:c.tick?1:0}:{n:it.tn||'Other',i:'📌',k:1}};
+const ptypes=()=>[['chore','🧹 Chore'],['event','📅 Event'],['date','⭐ Important date'],...(S.cp||[]).map(c=>['x:'+c.id,(c.icon||'📌')+' '+c.name])];
+function typeCh(){const v=$('#lt').value,nt=v=='date'||(S.cp||[]).some(c=>'x:'+c.id==v&&!c.tick);if(nt&&$('#lr').value=='none')$('#lr').value='yearly'}
+function addJc(){const n=$('#jcn').value.trim();if(!n)return toast('Type a category name.');if(jcats().some(c=>c.toLowerCase()==n.toLowerCase()))return toast('That category already exists.');(S.cj=S.cj||[]).push({id:uid(),name:n,t:Date.now()});save();toast('Category added');draw()}
+function delJc(id){S.del['c:'+id]=Date.now();S.cj=S.cj.filter(c=>c.id!=id);save();draw()}
+function addPt(){const n=$('#ptn').value.trim();if(!n)return toast('Type a name for the new type.');if(ptypes().some(([k,l])=>l.replace(/^\S+\s/,'').toLowerCase()==n.toLowerCase()))return toast('That type already exists.');(S.cp=S.cp||[]).push({id:uid(),name:n,icon:$('#pti').value.trim()||'📌',tick:$('#ptk').checked?1:0,t:Date.now()});save();toast('Type added');draw()}
+function delPt(id){S.del['q:'+id]=Date.now();S.cp=S.cp.filter(c=>c.id!=id);save();draw()}
+
+// ===== preferences kept on this device only =====
+const PK=K+'-prefs',LKK=K+'-lock';
+let PF={clock:1,flag:1,wx:1,unit:'c',loc:null,cf:1,cfd:1,cfh:1,cfLast:''};try{Object.assign(PF,JSON.parse(localStorage.getItem(PK)||'{}'))}catch(e){}
+const savePF=()=>{try{localStorage.setItem(PK,JSON.stringify(PF))}catch(e){}};
+let LKS={};try{LKS=JSON.parse(localStorage.getItem(LKK)||'{}')}catch(e){}
+const saveLock=()=>{try{localStorage.setItem(LKK,JSON.stringify(LKS))}catch(e){}},lockOn=()=>!!LKS.hash;
+function setPF(k,v){PF[k]=v;savePF();dashInit();if(k=='unit')draw()}
+
+// ===== dashboard: clock, waving flag, date + weather banner =====
+let dashT=null,flagRaf=0;
+const WMO=c=>c==0?['Clear sky','☀️','sun']:c<=2?[c==1?'Mainly clear':'Partly cloudy',c==1?'🌤️':'⛅','sun']:c==3?['Overcast','☁️','cloud']:c<=48?['Fog','🌫️','cloud']:c<=57?['Drizzle','🌦️','rain']:c<=67?[c>=65?'Heavy rain':'Rain','🌧️','rain']:c<=77?['Snow','🌨️','snow']:c<=82?['Rain showers','🌦️','rain']:c<=86?['Snow showers','🌨️','snow']:['Thunderstorm','⛈️','storm'];
+function clockHTML(){let t='';for(let i=0;i<12;i++)t+=`<line x1="0" y1="-41" x2="0" y2="${i%3?-37:-34}" transform="rotate(${i*30})" stroke="currentColor" stroke-width="${i%3?1.5:3}"/>`;
+ return `<div class="clk"><svg viewBox="-50 -50 100 100" width="70" height="70" aria-hidden="true"><circle r="47" fill="var(--card)" stroke="var(--pri)" stroke-width="4"/>${t}<line id="hh" y2="-24" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><line id="mh" y2="-35" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line id="sh" y2="-38" stroke="#d92d20" stroke-width="1.5"/><circle r="3.5" fill="#d92d20"/></svg><div class="dg"><b id="c1"></b><small id="c2"></small></div></div>`}
+function tick(){const n=new Date(),h=n.getHours()%12,m=n.getMinutes(),s=n.getSeconds(),r=(id,a)=>{const e=$('#'+id);if(e)e.setAttribute('transform','rotate('+a+')')};r('hh',h*30+m/2);r('mh',m*6+s/10);r('sh',s*6);
+ const c1=$('#c1'),c2=$('#c2');if(c1){c1.textContent=n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}).toUpperCase();c2.textContent=':'+pad(s)+' seconds'}}
+function flagStart(){const cv=$('#flag');if(!cv)return;const W=120,H=80,dpr=window.devicePixelRatio||1;cv.width=(W+16)*dpr;cv.height=(H+16)*dpr;cv.style.width=(W+16)+'px';cv.style.height=(H+16)+'px';
+ const sc=document.createElement('canvas');sc.width=W;sc.height=H;const g=sc.getContext('2d');g.fillStyle='#FF9933';g.fillRect(0,0,W,H/3);g.fillStyle='#fff';g.fillRect(0,H/3,W,H/3);g.fillStyle='#138808';g.fillRect(0,2*H/3,W,H/3);
+ g.translate(W/2,H/2);g.strokeStyle='#000080';g.lineWidth=1.2;g.beginPath();g.arc(0,0,11,0,7);g.stroke();for(let i=0;i<24;i++){g.beginPath();g.moveTo(0,0);g.lineTo(11*Math.cos(i*Math.PI/12),11*Math.sin(i*Math.PI/12));g.stroke()}g.fillStyle='#000080';g.beginPath();g.arc(0,0,2,0,7);g.fill();
+ const ctx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const paint=t=>{ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W+16,H+16);ctx.fillStyle='#8b5e3c';ctx.fillRect(4,2,4,H+14);ctx.fillStyle='#d4af37';ctx.beginPath();ctx.arc(6,3,3.5,0,7);ctx.fill();
+  for(let i=0;i<W;i++){const dy=Math.sin(i/9-t*4)*(1.2+i*.05);ctx.drawImage(sc,i,0,1,H,10+i,6+dy,1,H);const sh=Math.cos(i/9-t*4)*.16;ctx.fillStyle=sh>0?`rgba(0,0,0,${sh})`:`rgba(255,255,255,${-sh})`;ctx.fillRect(10+i,6+dy,1,H)}};
+ const loop=ts=>{if(!document.body.contains(cv))return;paint(ts/1000);flagRaf=requestAnimationFrame(loop)};
+ if(still)paint(0);else flagRaf=requestAnimationFrame(loop)}
+const wxKey=K+'-wx',wxK=()=>PF.loc?PF.loc.lat+','+PF.loc.lon+','+PF.unit:'';
+function wxClick(){if(!PF.loc)go('set');else{toast('Updating weather…');wxFetch(1)}}
+async function wxFetch(force){if(!PF.wx||!PF.loc)return;let c=null;try{c=JSON.parse(localStorage.getItem(wxKey)||'null')}catch(e){}
+ if(!force&&c&&c.k==wxK()&&Date.now()-c.t<9e5)return;
+ try{const u=`https://api.open-meteo.com/v1/forecast?latitude=${PF.loc.lat}&longitude=${PF.loc.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&temperature_unit=${PF.unit=='f'?'fahrenheit':'celsius'}`,j=await(await fetch(u)).json();if(!j.current)throw 0;localStorage.setItem(wxKey,JSON.stringify({k:wxK(),t:Date.now(),d:j}))}catch(e){}
+ wxDraw()}
+function wxDraw(){const e=$('#wx');if(!e)return;const dt=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});let c=null;try{c=JSON.parse(localStorage.getItem(wxKey)||'null')}catch(x){}
+ if(!PF.loc){e.className='wx w-cloud';e.innerHTML=`<div class="wm"><div class="wd1">📅 ${dt}</div><div class="wd2">📍 Tap here to set your location and see the weather</div></div>`;return}
+ if(!c||c.k!=wxK()){e.className='wx w-cloud';e.innerHTML=`<div class="wm"><div class="wd1">📅 ${dt}</div><div class="wd2">⏳ Getting the weather for ${esc(PF.loc.name)}… (needs internet)</div></div>`;return}
+ const j=c.d,cu=j.current,[tx,ic,cl]=WMO(cu.weather_code),night=cu.is_day===0,u=PF.unit=='f'?'°F':'°C',R=v=>Math.round(v);
+ e.className='wx w-'+(night&&cl=='sun'?'night':cl);
+ e.innerHTML=`<div class="wi">${night&&cu.weather_code<=1?'🌙':ic}</div><div class="wt"><b>${R(cu.temperature_2m)}${u}</b><small>${tx}</small></div><div class="wm"><div class="wd1">📅 ${dt}</div><div class="wd2">📍 ${esc(PF.loc.name)} · Feels like ${R(cu.apparent_temperature)}° · 💧 ${R(cu.relative_humidity_2m)}% · 💨 ${R(cu.wind_speed_10m)} km/h</div><div class="wd2">⬆ ${R(j.daily.temperature_2m_max[0])}° ⬇ ${R(j.daily.temperature_2m_min[0])}° · ☔ ${j.daily.precipitation_probability_max[0]??0}% chance of rain</div></div>`}
+let WR=[];
+async function geoSearch(){const q=$('#wq').value.trim(),o=$('#wr');if(!q)return;o.innerHTML='<p class="mut">Searching…</p>';
+ try{const j=await(await fetch('https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&name='+encodeURIComponent(q))).json();WR=j.results||[];o.innerHTML=WR.length?WR.map((r,i)=>`<button class="b g s" style="margin:6px 6px 0 0" onclick="pickLoc(${i})">${esc(r.name)}${r.admin1?', '+esc(r.admin1):''}, ${esc(r.country||'')}</button>`).join(''):'<p class="mut">No place found. Try a different spelling.</p>'}catch(e){o.innerHTML='<p class="mut">Could not search. Check your internet connection.</p>'}}
+function pickLoc(i){const r=WR[i];PF.loc={lat:r.latitude,lon:r.longitude,name:r.name+(r.admin1?', '+r.admin1:'')};savePF();dashInit();draw();toast('Weather location set')}
+function myLoc(){if(!navigator.geolocation)return toast('Location is not available on this device.');toast('Finding your location…');navigator.geolocation.getCurrentPosition(p=>{PF.loc={lat:+p.coords.latitude.toFixed(3),lon:+p.coords.longitude.toFixed(3),name:'My location'};savePF();dashInit();draw();toast('Weather location set')},()=>toast('Could not get your location. Allow location access, or search for your city.'),{timeout:15000})}
+function dashInit(){const d=$('#dash');if(!d)return;clearInterval(dashT);cancelAnimationFrame(flagRaf);
+ d.style.display=(PF.clock||PF.flag||PF.wx)?'':'none';
+ d.innerHTML=(PF.clock||PF.flag?`<div class="dtop">${PF.clock?clockHTML():'<span></span>'}${PF.flag?'<canvas id="flag" role="img" aria-label="Flag of India"></canvas>':'<span></span>'}</div>`:'')+(PF.wx?'<div id="wx" class="wx" onclick="wxClick()"></div>':'')+'<div id="sp"></div>';
+ if(PF.clock)tick();if(PF.flag)flagStart();if(PF.wx){wxDraw();wxFetch()}spDraw();
+ dashT=setInterval(()=>{if(PF.clock)tick();if(PF.wx&&new Date().getSeconds()==0)wxDraw()},1000)}
+
+// ===== confetti on special days =====
+function confetti(force){if(!force&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cv=document.createElement('canvas');cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70';document.body.appendChild(cv);
+ const dpr=window.devicePixelRatio||1,W=cv.width=innerWidth*dpr,H=cv.height=innerHeight*dpr,x=cv.getContext('2d'),cols=['#f94144','#f3722c','#f9c74f','#90be6d','#43aa8b','#577590','#c77dff','#ff70a6'];
+ const P=Array.from({length:150},()=>({x:Math.random()*W,y:-Math.random()*H*.6,w:(6+Math.random()*8)*dpr,h:(4+Math.random()*6)*dpr,vx:(Math.random()-.5)*3*dpr,vy:(2+Math.random()*4)*dpr,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.random()*cols.length|0]}));
+ const t0=performance.now();(function f(t){const el=t-t0;x.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx+Math.sin(p.y/80)*dpr;p.y+=p.vy;p.vy+=.03*dpr;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.globalAlpha=Math.max(0,1-Math.max(0,el-4000)/1500);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});if(el<5500)requestAnimationFrame(f);else cv.remove()})(t0)}
+function specialToday(){const t=tdy(),o=[];if(PF.cfd)(S.pl||[]).forEach(it=>{if(!ptype(it).k&&occ(it,t,t).length)o.push(it.title)});if(PF.cfh)(S.hol||[]).forEach(h=>{if(h.date==t&&h.name!='Sunday')o.push(h.name)});return o}
+function maybeConfetti(){const t=tdy();if(PF.cf&&specialToday().length&&PF.cfLast!=t){PF.cfLast=t;savePF();setTimeout(()=>confetti(),600)}}
+function spDraw(){const e=$('#sp');if(!e)return;const sd=specialToday();e.innerHTML=sd.length?`<div class="spb">🎉 Today: ${sd.map(esc).join(' · ')}</div>`:''}
+
+// ===== app lock (PIN + fingerprint / face through the phone's own security) =====
+let tries=0,until=0,pin='',hiddenAt=0;
+const b64=u=>btoa(String.fromCharCode(...new Uint8Array(u))),ub=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function hp(p,salt){const b=new TextEncoder().encode(salt+':'+p);if(window.crypto&&crypto.subtle){const h=await crypto.subtle.digest('SHA-256',b);return[...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}return btoa(salt+':'+p)}
+function showLock(){if(!lockOn())return;let o=$('#lk');if(!o){o=document.createElement('div');o.id='lk';document.body.appendChild(o)}pin='';lkDraw();o.style.display='flex';if(LKS.bio)setTimeout(bioUnlock,300)}
+function lkDraw(msg){const o=$('#lk'),n=LKS.n||4;o.innerHTML=`<div class="lkb"><div class="lkl">🔒</div><h2>${esc(S.label)}</h2><p class="mut">${msg||'Enter your PIN to open'}</p><div class="dots">${Array.from({length:n},(_,i)=>`<i class="${i<pin.length?'f':''}"></i>`).join('')}</div><div class="pad">${[1,2,3,4,5,6,7,8,9].map(d=>`<button onclick="kp('${d}')">${d}</button>`).join('')}${LKS.bio?'<button onclick="bioUnlock()" aria-label="Use fingerprint">🖐️</button>':'<span></span>'}<button onclick="kp('0')">0</button><button onclick="kp('b')" aria-label="Delete">⌫</button></div><button class="lkf" onclick="forgotPin()">Forgot PIN?</button></div>`}
+async function kp(d){if(Date.now()<until)return lkDraw('Too many tries. Wait '+Math.ceil((until-Date.now())/1000)+' seconds.');const n=LKS.n||4;if(d=='b')pin=pin.slice(0,-1);else if(pin.length<n)pin+=d;lkDraw();
+ if(pin.length==n){const ok=(await hp(pin,LKS.salt))==LKS.hash;if(ok){tries=0;unlock()}else{tries++;pin='';if(tries>=5){until=Date.now()+30000;tries=0;lkDraw('Too many tries. Wait 30 seconds.')}else lkDraw('Wrong PIN. Try again.');if(navigator.vibrate)navigator.vibrate(200)}}}
+function unlock(){const o=$('#lk');if(o)o.style.display='none';pin='';maybeConfetti()}
+function forgotPin(){if(!confirm('A forgotten PIN cannot be recovered.\n\nTo get back in, this device’s saved copy of your register will be erased. If sync was set up, your data stays safe in your Google Drive and comes back when you enter your sync address and secret key again. If sync was NOT set up, the data on this device will be lost.\n\nErase this device’s data and remove the lock?'))return;try{Object.keys(localStorage).filter(k=>k.indexOf(K)==0).forEach(k=>localStorage.removeItem(k))}catch(e){}location.reload()}
+async function setPin(){const a=$('#lp1').value.trim(),b=$('#lp2').value.trim();if(!/^\d{4,6}$/.test(a))return toast('The PIN must be 4 to 6 digits.');if(a!=b)return toast('The two PINs do not match.');
+ if(lockOn()&&(await hp($('#lp0').value.trim(),LKS.salt))!=LKS.hash)return toast('The current PIN is not correct.');
+ const salt=b64(crypto.getRandomValues(new Uint8Array(12)));LKS=Object.assign({},LKS,{salt,n:a.length,hash:await hp(a,salt),after:LKS.after??60});saveLock();lkBtn();toast('App lock is on');draw()}
+async function removePin(){if((await hp(($('#lp0')||{}).value||'',LKS.salt))!=LKS.hash)return toast('Enter your current PIN to turn the lock off.');LKS={};saveLock();lkBtn();toast('App lock is off');draw()}
+function setAfter(v){LKS.after=+v;saveLock()}
+function lkBtn(){const b=$('#lkb');if(b)b.hidden=!lockOn()}
+async function bioReg(){try{if(!window.PublicKeyCredential)throw 0;const c=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:S.label||'Register',id:location.hostname},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'owner',displayName:'Owner'},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000}});LKS.bio=b64(c.rawId);saveLock();toast('Fingerprint unlock is on');draw()}catch(e){toast('Fingerprint unlock is not available here, or it was cancelled.')}}
+async function bioUnlock(){try{await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rpId:location.hostname,allowCredentials:[{type:'public-key',id:ub(LKS.bio),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}catch(e){}}
+function bioOff(){delete LKS.bio;saveLock();draw()}
+document.addEventListener('keydown',e=>{const o=$('#lk');if(!o||o.style.display=='none')return;if(/^\d$/.test(e.key))kp(e.key);else if(e.key=='Backspace')kp('b')});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();return}if(lockOn()&&LKS.after>=0&&hiddenAt&&Date.now()-hiddenAt>=LKS.after*1000)showLock();wxFetch();wxDraw();spDraw()});
+function boot2(){lkBtn();dashInit();if(lockOn())showLock();else maybeConfetti();setInterval(()=>wxFetch(),9e5)}
+function stamp(m,pid,k){(m[pid]=m[pid]||{})[k]=Date.now()}
+const calDirty=()=>{const d=ui.draft;return !!d&&[...new Set([...Object.keys(d.att),...Object.keys(d.base)])].some(k=>d.att[k]!==d.base[k])};
+function lose(){if(ui.cal&&calDirty()&&!confirm('Discard your unsaved attendance changes?'))return false;ui.cal=false;ui.draft=null;return true}
+function editCal(){const p=P(ui.pid),c=S.att[p.id]||{};ui.cal=true;ui.draft={pid:p.id,att:Object.assign({},c),base:Object.assign({},c)};draw()}
+function cancelCal(){if(!lose())return;draw()}
+function saveCal(){const d=ui.draft;if(!d)return;const a=S.att[d.pid]=S.att[d.pid]||{};let n=0;
+ new Set([...Object.keys(d.att),...Object.keys(d.base)]).forEach(k=>{if(d.att[k]!==d.base[k]){n++;if(d.att[k])a[k]=d.att[k];else delete a[k];stamp(S.at,d.pid,k)}});
+ ui.cal=false;ui.draft=null;if(n)save();toast(n?'Attendance saved':'No changes to save');draw()}
+function chgMon(i){if(!lose()){draw();return}ui.mon=i.value||ui.mon;draw()}
+function chgP(i){if(!lose()){draw();return}ui.pid=i.value;draw()}
+function tog(k){if(!ui.cal||!ui.draft){toast('Calendar is locked. Press “Edit attendance” to change it.');return}const a=ui.draft.att,n={'':'P',P:'A',A:'H',H:''}[a[k]||''];if(n)a[k]=n;else delete a[k];draw()}
+function allP(){if(!ui.draft)return;const [y,m]=ui.mon.split('-').map(Number),H=hm(),a=ui.draft.att;for(let d=1;d<=dim(y,m);d++){const k=key(y,m,d);if(!H[k]&&!a[k])a[k]='P'}draw()}
+function clr(){if(!ui.draft||!confirm('Clear all attendance marks for this person in this month? (Press Save to keep the change.)'))return;const a=ui.draft.att;Object.keys(a).forEach(k=>{if(k.slice(0,7)==ui.mon)delete a[k]});draw()}
+function saveNote(){const p=P(ui.pid),d=$('#nd').value,t=$('#nn').value.trim();if(!d)return toast('Choose a day.');const m=S.nt[p.id]=S.nt[p.id]||{};if(t)m[d]=t;else delete m[d];stamp(S.nat,p.id,d);save();toast(t?'Note saved':'Note removed');draw()}
+function editNote(d){$('#nd').value=d;$('#nn').value=S.nt[ui.pid][d];$('#nn').focus()}
+function delNote(d){delete S.nt[ui.pid][d];stamp(S.nat,ui.pid,d);save();draw()}
+function addExtra(){const p=P(ui.pid),a=+$('#xa').value,d=$('#xd').value;if(!a||a<=0||!d)return toast('Choose a day and enter an amount above zero.');const x={id:uid(),pid:p.id,date:d,amt:a,note:$('#xn').value.trim()||'Extra work'};
+ if($('#xp').checked){const q={id:uid(),pid:p.id,date:d,mon:d.slice(0,7),amt:a,note:'Extra work: '+x.note};S.pay.push(q);x.payId=q.id}
+ (S.extra=S.extra||[]).push(x);save();toast('Extra work added');draw()}
+function delExtra(id){if(!confirm('Delete this extra work entry (and its linked payment, if any)?'))return;const x=S.extra.find(z=>z.id==id);if(x&&x.payId){S.del['y:'+x.payId]=Date.now();S.pay=S.pay.filter(q=>q.id!=x.payId)}S.del['x:'+id]=Date.now();S.extra=S.extra.filter(z=>z.id!=id);save();draw()}
+function addPay(){const a=+$('#pa').value,d=$('#pd').value,m=$('#pm').value,pid=$('#pp').value;if(!a||a<=0||!d||!m)return toast('Enter the date, month and an amount above zero.');S.pay.push({id:uid(),pid,date:d,mon:m,amt:a,note:$('#pn').value.trim()});save();toast('Payment saved');draw()}
+function delPay(id){if(confirm('Delete this payment?')){S.del['y:'+id]=Date.now();S.pay=S.pay.filter(x=>x.id!=id);save();draw()}}
+function savePerson(){const n=$('#fn').value.trim(),r=$('#fr').value.trim();if(!n||!r)return toast('Enter a name and a role.');const o={name:n,role:r,basis:$('#fb').value,rate:+$('#fa').value||0,phone:$('#fp').value.trim(),payHol:$('#fh').checked,t:Date.now()};
+ if(ui.edit)Object.assign(P(ui.edit),o);else{const p=Object.assign({id:uid()},o);S.people.push(p);ui.pid=p.id}save();ui.edit=null;toast('Saved');draw()}
+function delPerson(id){if(!confirm('Remove this person and all their attendance and payment records?'))return;S.del['p:'+id]=Date.now();S.people=S.people.filter(p=>p.id!=id);delete S.att[id];delete S.nt[id];S.extra=(S.extra||[]).filter(x=>x.pid!=id);S.pay=S.pay.filter(x=>x.pid!=id);save();draw()}
+function addHol(){const d=$('#hd').value,n=$('#hn2').value.trim();if(!d||!n)return toast('Enter a date and a name.');delete S.del['h:'+d];S.hol=S.hol.filter(h=>h.date!=d);S.hol.push({date:d,name:n});save();draw()}
+function delHol(d){S.del['h:'+d]=Date.now();S.hol=S.hol.filter(h=>h.date!=d);save();draw()}
+function sundays(){const y=ui.ry;for(let m=1;m<=12;m++)for(let d=1;d<=dim(y,m);d++)if(new Date(y,m-1,d).getDay()==0){const k=key(y,m,d);if(!S.hol.some(h=>h.date==k)){delete S.del['h:'+k];S.hol.push({date:k,name:'Sunday'})}}save();draw()}
+function logo(i){const f=i.files[0];if(!f)return;const r=new FileReader;r.onload=()=>{const im=new Image;im.onload=()=>{const k=Math.min(1,240/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);S.logo=c.toDataURL('image/png');S.lbt=Date.now();save();draw()};im.onerror=()=>toast('That file is not a usable image.');im.src=r.result};r.readAsDataURL(f)}
+function txt(t,v,ta){$('#tx').innerHTML=`<p class="mut">${t}</p><textarea id="tb" rows="6" ${ta?'':'readonly'}>${esc(v)}</textarea><div class="row" style="margin-top:8px"><button class="b s" onclick="$('#tb').select();try{document.execCommand('copy');toast('Copied')}catch(e){toast('Select the text and copy it')}">Copy</button></div>`;$('#tb').select()}
+function restore(){$('#tx').innerHTML=`<p class="mut">Paste backup text, then press Restore. This replaces the current data.</p><textarea id="tb" rows="6"></textarea><div class="row" style="margin-top:8px"><button class="b s" onclick="doRestore()">Restore</button></div>`}
+function doRestore(){try{const x=JSON.parse($('#tb').value);if(!Array.isArray(x.people))throw 0;S=Object.assign(DEF(),x);save();toast('Restored');draw()}catch(e){toast('That text is not a valid backup.')}}
+let RD=null;
+function rep(){const el=$('#rep');if(!el)return;const[y,m]=ym(ui.mon),t=ui.rt,pp=ui.rp=='all'?S.people:S.people.filter(p=>p.id==ui.rp),Y=ui.ry,H=hm();let T,hd,rows,tot;
+ if(!S.people.length){el.innerHTML='<p class="empty">Add people first.</p>';return}
+ if(t=='month'){T=`Monthly statement – ${MN[m-1]} ${y}`;hd=['Name','Role','Present','Half','Absent','Holidays','Extra work','Earned','Paid','Balance'];let e=0,pd=0,xt=0;rows=pp.map(p=>{const s=stats(p,y,m);e+=s.earned;pd+=s.paid;xt+=s.ex;return[p.name,p.role,s.pr,s.hf,s.ab,s.hl,money(s.ex),money(s.earned),money(s.paid),money(s.earned-s.paid)]});tot=['Total','','','','','',money(xt),money(e),money(pd),money(e-pd)]}
+ else if(t=='year'&&ui.rp!='all'){const p=pp[0];T=`Yearly summary – ${p.name} – ${Y}`;hd=['Month','Present','Half','Absent','Holidays','Extra work','Earned','Paid','Balance','Due so far'];let e=0,pd=0,xt=0;rows=MN.map((n,i)=>{const s=stats(p,Y,i+1);e+=s.earned;pd+=s.paid;xt+=s.ex;return[n,s.pr,s.hf,s.ab,s.hl,money(s.ex),money(s.earned),money(s.paid),money(s.earned-s.paid),money(e-pd)]});tot=['Total','','','','',money(xt),money(e),money(pd),'',money(e-pd)]}
+ else if(t=='year'){T=`Yearly summary – everyone – ${Y}`;hd=['Name','Role','Days present','Days absent','Earned','Paid','Due'];let e=0,pd=0;rows=pp.map(p=>{let a=0,b=0,x=0,z=0;for(let i=1;i<=12;i++){const s=stats(p,Y,i);a+=s.pr+s.hf/2;b+=s.ab+s.hf/2;x+=s.earned;z+=s.paid}e+=x;pd+=z;return[p.name,p.role,a,b,money(x),money(z),money(x-z)]});tot=['Total','','','',money(e),money(pd),money(e-pd)]}
+ else if(t=='ledger'){T=`Payment ledger – ${ui.rp=='all'?'everyone':pp[0].name} – ${Y}`;hd=['Date','Person','For month','Note','Amount'];const L=S.pay.filter(x=>(ui.rp=='all'||x.pid==ui.rp)&&x.date.slice(0,4)==Y).sort((a,b)=>a.date.localeCompare(b.date));rows=L.map(x=>[fd(x.date),P(x.pid)?.name||'(removed)',x.mon,x.note,money(x.amt)]);tot=['Total','','','',money(L.reduce((s,x)=>s+ +x.amt,0))]}
+ else if(t=='jr'){T=`Journal – ${Y}`;hd=['Date','Category','What happened','Amount','Details'];const L=S.jr.filter(x=>x.date.slice(0,4)==Y).sort((a,b)=>a.date.localeCompare(b.date));rows=L.map(x=>[fd(x.date),x.cat,x.title,x.amt?money(x.amt):'',x.note||'']);const sm=L.reduce((s,x)=>s+(+x.amt||0),0);tot=sm?['Total','','',money(sm),'']:null}
+ else if(t=='pl'){T=`Chores and events – ${MN[m-1]} ${y}`;hd=['Date','Type','Title','Status','Note'];rows=[];const f=key(y,m,1),e=key(y,m,dim(y,m));S.pl.forEach(it=>occ(it,f,e).forEach(d=>rows.push([d,ptype(it).n,it.title,ptype(it).k?((it.dn||{})[d]?'Done':'Pending'):'',it.note||''])));rows.sort((a,b)=>a[0].localeCompare(b[0])||a[2].localeCompare(b[2]));rows.forEach(r=>r[0]=fd(r[0]));tot=null}
+ else if(t=='notes'){T=`Attendance notes – ${ui.rp=='all'?'everyone':pp[0].name} – ${Y}`;hd=['Date','Person','Status','Note'];rows=[];pp.forEach(p=>Object.entries(S.nt[p.id]||{}).forEach(([d,x])=>{if(x&&d.slice(0,4)==Y)rows.push([d,p.name,({P:'Present',A:'Absent',H:'Half day'})[(S.att[p.id]||{})[d]]||(H[d]?'Holiday':'Not marked'),x])}));rows.sort((a,b)=>a[0].localeCompare(b[0])||a[1].localeCompare(b[1]));rows.forEach(r=>r[0]=fd(r[0]));tot=null}
+ else{const p=pp[0];T=`Attendance register – ${p.name} – ${Y}`;hd=['Month',...Array.from({length:31},(_,i)=>i+1)];const a=S.att[p.id]||{};rows=MN.map((n,i)=>[n,...Array.from({length:31},(_,d)=>{if(d+1>dim(Y,i+1))return'';const k=key(Y,i+1,d+1),v=a[k];return v=='P'?'P':v=='A'?'A':v=='H'?'½':H[k]?'H':'–'})]);tot=null}
+ RD={T,hd,rows,tot};
+ el.innerHTML=`<div class="rh">${S.logo?`<img src="${S.logo}" alt="">`:''}<b>${esc(S.label)}</b></div><h2>${esc(T)}</h2><div class="tw"><table><tr>${hd.map((h,i)=>`<th class="${i>=hd.length-3&&t!='reg'&&t!='notes'&&t!='pl'&&t!='jr'?'n':''}">${esc(h)}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${i>=hd.length-3&&t!='reg'&&t!='notes'&&t!='pl'&&t!='jr'?'n':''}">${esc(c)}</td>`).join('')}</tr>`).join('')}${tot?`<tr class="t">${tot.map((c,i)=>`<td class="${i>=hd.length-3?'n':''}">${esc(c)}</td>`).join('')}</tr>`:''}</table></div>
+ ${t=='reg'?'<p class="mut">P present, A absent, ½ half day, H holiday, – not marked.</p>':''}<div class="row noprint" style="margin-top:12px"><button class="b" onclick="window.print()">Print or save as PDF</button><button class="b g" onclick="csv()">Show as CSV</button></div><div id="tx" class="noprint"></div>`}
+function csv(){const q=c=>'"'+String(c).replace(/"/g,'""')+'"',a=[RD.T,RD.hd,...RD.rows];if(RD.tot)a.push(RD.tot);txt('Copy this text and paste it into Excel or Google Sheets.',a.map(r=>[].concat(r).map(q).join(',')).join('\n'))}
+look();draw();boot2();if(on()){setSt('Connecting…');pull();setInterval(pull,20000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull()})}else setSt('This device only');
+</script><script>
+let DIP=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();DIP=e;const b=document.getElementById('ib');if(b)b.hidden=false});
+window.addEventListener('appinstalled',()=>{DIP=null;const b=document.getElementById('ib');if(b)b.hidden=true});
+async function installApp(){if(!DIP)return;DIP.prompt();try{await DIP.userChoice}catch(e){}DIP=null;document.getElementById('ib').hidden=true}
+if('serviceWorker' in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
