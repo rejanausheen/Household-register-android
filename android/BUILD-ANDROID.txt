@@ -1,0 +1,14 @@
+BUILD THE ANDROID .APK
+Option A - Android Studio (easiest)
+1. Install Android Studio from https://developer.android.com/studio
+2. File > Open > choose this "android" folder. Let Gradle sync finish.
+3. Build > Build Bundle(s) / APK(s) > Build APK(s).
+4. Click "locate" in the popup. File: app/build/outputs/apk/debug/app-debug.apk
+Option B - command line (SDK installed, JDK 17+)
+   gradle assembleDebug        (or ./gradlew assembleDebug if you generated a wrapper)
+INSTALL ON THE PHONE
+Copy app-debug.apk to the phone, open it, and allow "Install unknown apps" when asked.
+The APK is debug-signed, which is fine for your own devices. For the Play Store you need a
+release build signed with your own key (Build > Generate Signed Bundle / APK).
+Notes: "Print or save as PDF" in Reports uses the browser print dialog, which Android WebView
+does not offer; use "Show as CSV" there instead.
