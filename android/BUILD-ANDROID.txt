@@ -12,3 +12,8 @@ The APK is debug-signed, which is fine for your own devices. For the Play Store 
 release build signed with your own key (Build > Generate Signed Bundle / APK).
 Notes: "Print or save as PDF" in Reports uses the browser print dialog, which Android WebView
 does not offer; use "Show as CSV" there instead.
+
+FINGERPRINT UNLOCK
+In the app: Settings > App lock > set an app PIN first (it stays as a fallback), then press
+"Enable fingerprint unlock". Your phone's own fingerprint prompt appears; your screen lock is the fallback.
+Needs a fingerprint or screen lock set up in the phone's Settings. This version needs Android 10 or newer.

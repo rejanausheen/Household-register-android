@@ -2,6 +2,13 @@ package com.householdhelp.register;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.KeyguardManager;
+import android.hardware.biometrics.BiometricManager;
+import android.hardware.biometrics.BiometricPrompt;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.webkit.JavascriptInterface;
+import org.json.JSONObject;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -57,8 +64,53 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
+        web.addJavascriptInterface(new AuthBridge(), "AndroidAuth");
         web.loadUrl("https://appassets.androidplatform.net/index.html");
     }
+
+    // ---- Fingerprint / screen-lock unlock, called from the web app ----
+    private class AuthBridge {
+        @JavascriptInterface public boolean available() { return canAuth(); }
+        @JavascriptInterface public void verify(final String id) { runOnUiThread(() -> startAuth(id)); }
+    }
+
+    private boolean canAuth() {
+        if (Build.VERSION.SDK_INT >= 30) {
+            BiometricManager bm = getSystemService(BiometricManager.class);
+            return bm != null && bm.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK
+                | BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
+        }
+        KeyguardManager km = getSystemService(KeyguardManager.class);
+        return km != null && km.isDeviceSecure();
+    }
+
+    private void finishAuth(String id, String result) {
+        web.evaluateJavascript("window.__authDone(" + JSONObject.quote(id) + "," + JSONObject.quote(result) + ")", null);
+    }
+
+    private void startAuth(final String id) {
+        if (!canAuth()) {
+            finishAuth(id, "Set up a fingerprint or screen lock in your phone's Settings first.");
+            return;
+        }
+        BiometricPrompt.Builder b = new BiometricPrompt.Builder(this)
+            .setTitle("Unlock Help Register")
+            .setSubtitle("Use your fingerprint");
+        if (Build.VERSION.SDK_INT >= 30) {
+            b.setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK
+                | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
+        } else {
+            b.setDeviceCredentialAllowed(true);
+        }
+        b.build().authenticate(new CancellationSignal(), getMainExecutor(), new BiometricPrompt.AuthenticationCallback() {
+            @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult r) { finishAuth(id, "ok"); }
+            @Override public void onAuthenticationError(int code, CharSequence msg) { finishAuth(id, ""); }
+        });
+    }
+
+    // Tell the web app when the app goes to the background, so "lock after" works reliably.
+    @Override protected void onStop() { super.onStop(); web.evaluateJavascript("window.__appHide&&__appHide()", null); }
+    @Override protected void onStart() { super.onStart(); web.evaluateJavascript("window.__appShow&&__appShow()", null); }
 
     @Override
     protected void onActivityResult(int req, int res, Intent data) {

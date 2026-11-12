@@ -4,7 +4,7 @@ android {
     compileSdk 34
     defaultConfig {
         applicationId "com.householdhelp.register"
-        minSdk 24
+        minSdk 29
         targetSdk 34
         versionCode 1
         versionName "1.0"

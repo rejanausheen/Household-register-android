@@ -219,12 +219,12 @@ set(){return `<details class="card" ${fo('s-logo',1)}><summary>App name and logo
  <div class="row" style="margin-top:12px"><button class="b g" onclick="confetti(1)">Test confetti</button></div>
  <p class="mut">Confetti falls once a day, when you open the app on a special day. Today’s special days also show in a banner under the title. Saved on this device only.</p></details>
  <details class="card" ${fo('s-lock',1)}><summary>App lock</summary>
- <p class="mut">${lockOn()?'The app is protected. It asks for your PIN'+(LKS.bio?' or fingerprint':'')+' when you open it.':'Protect the app with a PIN. On a phone you can also unlock with your fingerprint or face.'}</p>
+ <p class="mut">${lockOn()?'The app is protected. It asks for your PIN'+(LKS.bio?' or '+bioName():'')+' when you open it.':'Protect the app with a PIN. On a phone you can also unlock with your fingerprint or face.'}</p>
  <div class="row">${lockOn()?'<label>Current PIN<input id="lp0" type="password" inputmode="numeric" maxlength="6" autocomplete="off"></label>':''}<label>${lockOn()?'New PIN':'Choose a PIN'} (4 to 6 digits)<input id="lp1" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password"></label><label>Repeat PIN<input id="lp2" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password"></label></div>
  <div class="row" style="margin-top:10px"><button class="b" onclick="setPin()">${lockOn()?'Change PIN':'Turn on app lock'}</button>${lockOn()?'<button class="b d" onclick="removePin()">Turn off lock</button>':''}</div>
  ${lockOn()?`<div class="row" style="margin-top:14px"><label>Lock again after<select onchange="setAfter(this.value)">${[[0,'Immediately when I leave the app'],[30,'30 seconds'],[60,'1 minute'],[300,'5 minutes'],[900,'15 minutes'],[-1,'Only when I open the app']].map(([v,n])=>`<option value="${v}" ${LKS.after==v?'selected':''}>${n}</option>`).join('')}</select></label></div>
- <div class="row" style="margin-top:10px">${LKS.bio?'<button class="b g" onclick="bioOff()">Turn off fingerprint unlock</button>':'<button class="b g" onclick="bioReg()">Enable fingerprint or face unlock</button>'}<button class="b g" onclick="showLock()">Lock now</button></div>`:''}
- <p class="mut">This is a privacy lock for this device. It stops other people from opening the app, but it is not encryption. Fingerprint unlock uses your phone’s own fingerprint, face or screen-lock security. If you forget the PIN, this device’s copy is erased, and your synced data comes back when you set up sync again.</p></details>
+ <div class="row" style="margin-top:10px">${LKS.bio?'<button class="b g" onclick="bioOff()">Turn off '+bioName()+' unlock</button>':'<button class="b g" onclick="bioReg()">Enable '+bioName()+' unlock</button>'}<button class="b g" onclick="showLock()">Lock now</button></div>`:''}
+ <p class="mut">This is a privacy lock for this device. It stops other people from opening the app, but it is not encryption. Biometric unlock uses your device’s own security: Windows Hello PIN on Windows, or your fingerprint, face or screen lock on a phone. If you forget the PIN, this device’s copy is erased, and your synced data comes back when you set up sync again.</p></details>
  <details class="card" ${fo('s-jc',1)}><summary>Journal categories</summary>
  <div class="row"><label style="flex:2 1 200px">New category<input id="jcn" placeholder="Gifts, Vehicle, School…" onkeydown="if(event.key=='Enter')addJc()"></label><button class="b" onclick="addJc()">Add category</button></div>
  <p class="mut">Built in: ${JCATS.join(', ')}.</p>
@@ -370,7 +370,11 @@ function maybeConfetti(){const t=tdy();if(PF.cf&&specialToday().length&&PF.cfLas
 function spDraw(){const e=$('#sp');if(!e)return;const sd=specialToday();e.innerHTML=sd.length?`<div class="spb">🎉 Today: ${sd.map(esc).join(' · ')}</div>`:''}
 
 // ===== app lock (PIN + fingerprint / face through the phone's own security) =====
-let tries=0,until=0,pin='',hiddenAt=0;
+let tries=0,until=0,pin='',hiddenAt=0,bioBusy=0,graceUntil=0;
+// Native unlock: the Windows app exposes window.NativeAuth (Windows Hello PIN); the Android app exposes window.AndroidAuth (fingerprint / screen lock).
+const __acb={};window.__authDone=(id,r)=>{const f=__acb[id];if(f){delete __acb[id];f(r)}};
+function nat(){if(window.NativeAuth)return window.NativeAuth;if(window.AndroidAuth)return{label:'fingerprint',verify:()=>new Promise(res=>{const id='a'+Date.now();__acb[id]=r=>res(r==='ok'?true:r);AndroidAuth.verify(id)})};return null}
+function bioName(){const n=nat();return n?n.label:'fingerprint or face'}
 const b64=u=>btoa(String.fromCharCode(...new Uint8Array(u))),ub=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function hp(p,salt){const b=new TextEncoder().encode(salt+':'+p);if(window.crypto&&crypto.subtle){const h=await crypto.subtle.digest('SHA-256',b);return[...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}return btoa(salt+':'+p)}
 function showLock(){if(!lockOn())return;let o=$('#lk');if(!o){o=document.createElement('div');o.id='lk';document.body.appendChild(o)}pin='';lkDraw();o.style.display='flex';if(LKS.bio)setTimeout(bioUnlock,300)}
@@ -385,11 +389,21 @@ async function setPin(){const a=$('#lp1').value.trim(),b=$('#lp2').value.trim();
 async function removePin(){if((await hp(($('#lp0')||{}).value||'',LKS.salt))!=LKS.hash)return toast('Enter your current PIN to turn the lock off.');LKS={};saveLock();lkBtn();toast('App lock is off');draw()}
 function setAfter(v){LKS.after=+v;saveLock()}
 function lkBtn(){const b=$('#lkb');if(b)b.hidden=!lockOn()}
-async function bioReg(){try{if(!window.PublicKeyCredential)throw 0;const c=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:S.label||'Register',id:location.hostname},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'owner',displayName:'Owner'},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000}});LKS.bio=b64(c.rawId);saveLock();toast('Fingerprint unlock is on');draw()}catch(e){toast('Fingerprint unlock is not available here, or it was cancelled.')}}
-async function bioUnlock(){try{await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rpId:location.hostname,allowCredentials:[{type:'public-key',id:ub(LKS.bio),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}catch(e){}}
+async function bioReg(){const n=nat();
+ if(n){bioBusy=1;let r;try{r=await n.verify()}catch(e){r='Could not start the device check.'}bioBusy=0;graceUntil=Date.now()+1500;
+  if(r===true){LKS.bio='native';saveLock();toast(bioName()+' unlock is on');draw()}else toast(r||'Cancelled.');return}
+ try{if(!window.PublicKeyCredential)throw 0;const c=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:S.label||'Register',id:location.hostname},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'owner',displayName:'Owner'},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'discouraged'},timeout:60000}});LKS.bio=b64(c.rawId);saveLock();toast('Fingerprint unlock is on');draw()}catch(e){toast('Fingerprint unlock is not available here, or it was cancelled.')}}
+async function bioUnlock(){if(bioBusy)return;bioBusy=1;
+ try{if(LKS.bio==='native'){const n=nat();if(n&&(await n.verify())===true)unlock();return}
+  await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rpId:location.hostname,allowCredentials:[{type:'public-key',id:ub(LKS.bio),transports:['internal']}],userVerification:'required',timeout:60000}});unlock()}
+ catch(e){}finally{bioBusy=0;graceUntil=Date.now()+1500;hiddenAt=0}}
 function bioOff(){delete LKS.bio;saveLock();draw()}
 document.addEventListener('keydown',e=>{const o=$('#lk');if(!o||o.style.display=='none')return;if(/^\d$/.test(e.key))kp(e.key);else if(e.key=='Backspace')kp('b')});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){hiddenAt=Date.now();return}if(lockOn()&&LKS.after>=0&&hiddenAt&&Date.now()-hiddenAt>=LKS.after*1000)showLock();wxFetch();wxDraw();spDraw()});
+function lkHide(){if(!bioBusy&&Date.now()>graceUntil)hiddenAt=Date.now()}
+function lkShow(){if(!bioBusy&&Date.now()>graceUntil&&lockOn()&&LKS.after>=0&&hiddenAt&&Date.now()-hiddenAt>=LKS.after*1000)showLock();hiddenAt=0;wxFetch();wxDraw();spDraw()}
+window.__appHide=lkHide;window.__appShow=lkShow;
+document.addEventListener('visibilitychange',()=>document.hidden?lkHide():lkShow());
+if(window.NativeAuth&&NativeAuth.onLock)NativeAuth.onLock(()=>{if(lockOn())showLock()});
 function boot2(){lkBtn();dashInit();if(lockOn())showLock();else maybeConfetti();setInterval(()=>wxFetch(),9e5)}
 function stamp(m,pid,k){(m[pid]=m[pid]||{})[k]=Date.now()}
 const calDirty=()=>{const d=ui.draft;return !!d&&[...new Set([...Object.keys(d.att),...Object.keys(d.base)])].some(k=>d.att[k]!==d.base[k])};
